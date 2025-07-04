@@ -1,0 +1,21 @@
+{
+    "name": "@blazyts/better-standard-library",
+    "type": "module",
+    "version": "1.0.0",
+    "module": "index.ts",
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "scripts": {
+        "build-lib": "tsup index.ts --format cjs,esm --dts"
+    },
+    "dependencies": {
+        "@types/bun": "latest",
+        "bun-types": "latest",
+        "dotenv": "^16.5.0"
+    },
+    "devDependencies": {
+        "tsup": "^8.5.0",
+        "vitest": "^0.34.0"
+    }
+}
