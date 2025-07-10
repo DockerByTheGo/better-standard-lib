@@ -1,13 +1,13 @@
-import type { Tick } from "../errors-as-values/rust-like-pattern/tick";
-import type { VCallback } from "../types/voidcallback";
+import { VCallback } from "@better-standard-internal/types/voidcallback";
+import { Tick } from "../Tick/export";
 
-export class BetterArray<V> implements Tick<V[]> {
+export class BetterArray<V> implements Tick.Types.Tick<V[]> {
     private data: V[];
     constructor(data: V[]) {
         this.data = data;
     }
 
-    filter(isValueValid: (v: V) => boolean) { // normal filter function accepts any type and this shouldnt happen
+    filter(isValueValid: (v: V) => boolean) {
         return new BetterArray(this.data.filter(isValueValid));
     }
 

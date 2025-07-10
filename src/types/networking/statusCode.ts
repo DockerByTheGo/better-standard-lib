@@ -1,4 +1,4 @@
-import { ContextSafeType } from "../baseContextSafeTypet.ts";
+import { ContextSafeType } from "../baseContextSafeTypet.js";
 
 export class StatusCode extends ContextSafeType<number> {
     customValidator(v: number): boolean {

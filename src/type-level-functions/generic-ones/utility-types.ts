@@ -2,7 +2,10 @@
  * Utility types that can be used throughout the codebase
  */
 
-export type OptionalPromise<T> = Promise<import('../data_structures/option').Optionable<T>>;
+
+import { Optionable } from "@better-standard-internal/data_structures/option";
+
+export type OptionalPromise<T> = Promise<Optionable<T>>;
 export type OPromise<T> = OptionalPromise<T>;
 
 export type URecord = Record<string, unknown>;

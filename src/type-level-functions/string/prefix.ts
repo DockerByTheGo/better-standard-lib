@@ -1,4 +1,4 @@
-import type { keyofonlystringkeys } from "./keyofonlystringkeys";
+import type { keyofonlystringkeys } from "./generic-ones/keyofonlystringkeys";
 
 export type Prefix<T extends string, Prefix extends string> = `${Prefix}${T}`;
 

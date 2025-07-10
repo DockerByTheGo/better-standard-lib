@@ -1,5 +1,5 @@
-import type { valuesOf } from "../type-level-functions/valuesOf";
-import type { Filter } from "../type-level-functions/filter";
+import type { valuesOf } from "../type-level-functions/record/valuesOf";
+import type { Filter } from "../type-level-functions/union/filter";
 import type { UnknownRecord } from "../types/unknwonString";
 
 import { ifNotNone } from "./option";

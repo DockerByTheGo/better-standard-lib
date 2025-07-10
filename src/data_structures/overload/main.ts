@@ -1,7 +1,7 @@
 import z from "zod";
 import { Try } from "../option";
 import { OverloadsBase, OverloadsImplBase, ZodRawObject } from "./types";
-import { isTrue } from "@better-standard-internal/type-level-functions/isBoolean";
+import { isTrue } from "@better-standard-internal/type-level-functions/boolean/isBoolean";
 import { ISimpleMapable } from "../mapable";
 
 export class FunctionOverload<Y extends OverloadsBase, T extends OverloadsImplBase<Y>> {

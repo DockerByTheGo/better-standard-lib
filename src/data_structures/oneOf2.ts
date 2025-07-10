@@ -1,4 +1,4 @@
-import type { Filter } from "../type-level-functions/filter";
+import type { Filter } from "../type-level-functions/union/filter";
 
 import { ifNotNone } from "./option";
 

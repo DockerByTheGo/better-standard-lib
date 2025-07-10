@@ -1,3 +1,2 @@
-export * from './utility-types';
-export * from './tuples';
+export * from './generic-ones/utility-types';
 export * from '../types/networking';

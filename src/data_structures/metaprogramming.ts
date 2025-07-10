@@ -17,7 +17,7 @@ export {
 export * from '../type-level-functions/tuples';
 
 // Deprecated type aliases for backward compatibility
-import { OptionalObject as OptionalObjectType } from '../type-level-functions/utility-types';
+import { OptionalObject as OptionalObjectType } from '../type-level-functions/generic-ones/utility-types';
 
 export type OptionalObject<T> = OptionalObjectType<T>;
 
