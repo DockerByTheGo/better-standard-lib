@@ -3,7 +3,7 @@ import type { none } from "../option";
 
 import { LeftRight } from "../leftRight";
 import { Mapable } from "../mapable";
-import { panic } from "@better-standard-internal/functions/panic";
+import { panic } from "../../functions/panic";
 
 export type IUnpackable<T> = {
     unpack: (errMsg?: string) => Mapable<T, unknown>;
