@@ -1,7 +1,6 @@
 // Data Structures
 export * from "./src/data_structures/getSetClass";
 export * from "./src/data_structures/group";
-export * from "./src/data_structures/oneOf";
 export * from "./src/data_structures/RecordCompatibeArray";
 export * from "./src/data_structures/safestring";
 
@@ -26,3 +25,5 @@ export * from "./src/data_structures/metaprogramming";
 
 export * from "./src/data_structures/overload/export"
 export * from "./src/data_structures/base/export"
+export * from "./src/data_structures/array/export"
+export * from "./src/type-level-functions/index"
