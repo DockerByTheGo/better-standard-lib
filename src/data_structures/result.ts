@@ -1,4 +1,4 @@
-import { Optionable } from "./option";
+import { Optionable } from "./option/main";
 import { CustomUnpackable } from "./unpackable/unpackable";
 
 export type ICustomError = {

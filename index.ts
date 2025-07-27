@@ -6,11 +6,11 @@ export * from "./src/data_structures/safestring";
 
 // Error Handling
 export * from "./src/data_structures/mapThatIsLikeInRust";
-export * from "./src/data_structures/option";
+export * from "./src/data_structures/option/main";
 export * from "./src/data_structures/result";
 
-// Type Utilities
-export * from "./src/type-level-functions";
+
+
 
 // Utility Functions
 export * from "./src/functions/logging";
@@ -20,10 +20,10 @@ export * from "./src/functions/panic";
 export type { PortNumber } from "./src/types/networking";
 export type { WebSocketUrl } from "./src/types/networking";
 // Note: The following exports are kept for backward compatibility but are deprecated
-// and will be removed in a future version. Please import from their new locations.
-export * from "./src/data_structures/metaprogramming";
 
-export * from "./src/data_structures/overload/export"
+// export * from "./src/data_structures/overload/export"
+export * from "./src/data_structures/option/exports"
+
 export * from "./src/data_structures/base/export"
 export * from "./src/data_structures/array/export"
-export * from "./src/type-level-functions/index"
+export {TypeLevelFunctions} from "./src/type-level-functions/index"

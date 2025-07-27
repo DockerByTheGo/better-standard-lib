@@ -1,6 +1,6 @@
 import type { Last } from "../type-level-functions/tuple/getLast";
 
-import { Optionable } from "./option";
+import { Optionable } from "./option/main";
 import { panic } from "../functions/panic";
 import { GetSet } from "./getSetClass";
 

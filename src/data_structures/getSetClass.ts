@@ -1,7 +1,7 @@
 import type { ISimpleMapable } from "./mapable";
 import type { VCallback } from "../types/voidcallback";
 
-import { ifNotNone } from "./option";
+import { ifNotNone } from "./option/main";
 
 export class GetSet<V> implements ISimpleMapable<V> {
     private v: V;

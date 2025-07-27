@@ -3,7 +3,7 @@
  */
 
 
-import { Optionable } from "@better-standard-internal/data_structures/option";
+import { Optionable } from "@better-standard-internal/data_structures/option/main";
 
 export type OptionalPromise<T> = Promise<Optionable<T>>;
 export type OPromise<T> = OptionalPromise<T>;

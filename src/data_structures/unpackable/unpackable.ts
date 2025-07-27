@@ -1,5 +1,5 @@
 import type { ILeftRight } from "../leftRight";
-import type { none } from "../option";
+import type { none } from "../option/main";
 
 import { LeftRight } from "../leftRight";
 import { Mapable } from "../mapable";

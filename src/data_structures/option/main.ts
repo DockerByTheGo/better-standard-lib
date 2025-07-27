@@ -1,8 +1,7 @@
-import type { Callback, VCallback } from "../types/voidcallback";
-import type { Tick } from "../errors-as-values/rust-like-pattern/tick";
-import type { IUnpackable } from "./unpackable/unpackable";
+import type { Callback, VCallback } from "../../types/voidcallback";
+import type { IUnpackable } from "../unpackable/unpackable";
 
-import { CustomUnpackable } from "./unpackable/unpackable";
+import { CustomUnpackable } from "../unpackable/unpackable";
 
 export type none = null | undefined;
 
@@ -23,9 +22,6 @@ export function Try<
     return config.ifNotNone(v);
 }
 
-export type IOptionable<T> = {
-    is_none: () => boolean;
-} & IUnpackable<T>;
 
 // export class Optionable<T> implements IOptionable<T>{
 //     private value: T | none = null
@@ -120,6 +116,6 @@ export function mapOptionable<T>(v: T | none): Optionable<T> {
     return new Optionable(v)
 }
 
-export function ifNotNone<T>(v: T | none, callback: (v: T) => Promise<void>) {
+export function ifNotNone<T>(v: T | none, callback: (v: T) => void) {
     return new Optionable(v as T).ifCanBeUnpacked(callback);
 }
