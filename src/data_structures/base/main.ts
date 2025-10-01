@@ -1,6 +1,6 @@
 
 import { VCallback } from "@better-standard-internal/types/voidcallback";
-import * as Pipeable from "@better-standard-internal/data_structures/Pipe/export"
+import * as Pipeable from "@better-standard-internal/data_structures/pipe/export"
 export class BaseValue<V> implements Pipeable.types.IPipeable<V> {
     constructor(private v: V) {}
     map<F>(func: (v: V) => F): BaseValue<F> {

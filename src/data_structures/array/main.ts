@@ -1,5 +1,5 @@
 import { VCallback } from "@better-standard-internal/types/voidcallback";
-import { Tick } from "../Tick/export";
+import { Tick } from "../tick/export";
 import { Last } from "@better-standard-internal/type-level-functions/tuple/getLast";
 
 /*
