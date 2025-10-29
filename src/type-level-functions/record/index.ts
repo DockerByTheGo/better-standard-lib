@@ -3,7 +3,10 @@ export type With<OriginalObject extends Record<string, unknown>, NewKey extends 
     [Key in keyof OriginalObject]: OriginalObject[Key];
 } & {
     [K in NewKey]: TypeOfNewKey;
-};export type BetterOmit<T extends Record<string, unknown>, K extends keyof T> = {
+};
+
+export type BetterOmit<T extends Record<string, unknown>, K extends keyof T> = {
     [Key in keyof T as Key extends K ? never : Key]: T[Key];
 };
 
+export * from "./pretifyRecord"
