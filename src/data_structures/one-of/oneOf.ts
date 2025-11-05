@@ -1,69 +1,32 @@
-import type { valuesOf } from "../type-level-functions/record/valuesOf";
-import type { Filter } from "../type-level-functions/union/filter";
-import type { UnknownRecord } from "../types/unknwonString";
+import { KeyOfOnlyStringKeys, URecord } from "@better-standard-internal/type-level-functions";
 
-import { ifNotNone } from "./option";
+export class OneOf<T extends URecord> {
 
-type RemoveKey<T extends Record<string, object>, K extends PropertyKey> = {
-    [P in keyof T]: Omit<T[P], K>;
-};
+    constructor(v: T) {
 
-export namespace OneOf {
+    }
 
-    export type One<K extends keyof UnknownRecord> = { type: K; d: UnknownRecord[K] };
+    defineHandlers(handler: {[name in  KeyOfOnlyStringKeys<T> as `if${name}`]?: (v: T[name]) => void}){
 
-  type Handlers<T extends UnknownRecord> = {
-      [K in keyof T]?: (v: { type: K } & T[K]) => unknown
-  };
+    }
 
-  type AddToEachEntry<V extends Record<string, unknown>, Additional extends Record<string, unknown>> = {
-      [Key in keyof V]: V[Key] & Additional
-  };
+    do<Key extends KeyOfOnlyStringKeys<T>>(v: {type: Key} & T[Key]){
 
-  export class Instance<T extends AddToEachEntry<UnknownRecord, { type: string }>, H extends Handlers<T> = {}> {
-      private value: valuesOf<T>;
-      private handlers: H = {} as H;
-      public schema: T;
-      constructor(v: valuesOf<T>, handlers?: H) {
-          this.value = v;
-          ifNotNone(handlers, h => this.handlers = h);
-      }
-
-      if<
-          K extends keyof T,
-          ReturnType,
-      >(
-          config: {
-              v: K;
-              handler: (v: { type: K; d: T[K] }) => ReturnType;
-          },
-      ): Instance<
-              T,
-              H & {
-                  [Key in K]: (v: { type: Key; d: T[Key] }) => ReturnType
-              }
-          > {
-          return new Instance(this.value, {
-              ...this.handlers,
-              [config.v]: config.handler,
-          });
-      }
-
-      run(): ReturnType<Filter<H[keyof H], [undefined]>> | void {
-      }
-
-      def(handlers: Handlers<T>): ReturnType<Filter<H[keyof H], [undefined]>> {
-          let res = null;
-          console.log("ll");
-          Object.entries(handlers).forEach(([key, value], i) => {
-              console.log("kkk", this.value.type, key);
-              if (key === this.value.type) {
-                  res = handlers[key](this.value);
-              }
-          });
-          console.log(res);
-          return res;
-      }
-  }
+    }
 
 }
+
+const l:  {
+    j: {koko: string},
+    v: {l: string}
+} = {}
+
+new OneOf(
+    l,
+)
+.defineHandlers({
+    ifj: v => v.koko,
+})
+.do({
+    
+})

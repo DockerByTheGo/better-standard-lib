@@ -19,4 +19,5 @@ export * from "./returnFromVoid";
 export * from "./safestring";
 export * from "./tick";
 export * from "./unpackable";
-export * from "./map"
+export * from "./map";
+export * from "./type-marker";
