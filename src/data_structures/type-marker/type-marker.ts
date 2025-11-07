@@ -1,3 +1,6 @@
+
+
+
 export class TypeMarker<T extends string> {
     constructor(public readonly type: T) {
         
@@ -9,4 +12,8 @@ export class TypeMarker<T extends string> {
 
     TGetType: T
 
+}
+
+export interface ITypeMarked<T extends string> {
+    typeInfo: TypeMarker<T>
 }

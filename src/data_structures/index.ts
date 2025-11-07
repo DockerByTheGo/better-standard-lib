@@ -7,7 +7,7 @@ export { Either as EitherSimple } from "./either";
 export * from "./env";
 export * from "./getSetClass";
 export * from "./group";
-export { LeftRight, ILeftRight, Either, ClassicalEither } from "./leftRight";
+export * from "./leftRight";
 export * from "./map";
 export * from "./one-of";
 export * from "./option";
