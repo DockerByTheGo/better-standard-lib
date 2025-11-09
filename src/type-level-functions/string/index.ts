@@ -1,7 +1,5 @@
-import * as CONTAINS from "./contains"
-import * as REMOVE from "./remove"
-
-export namespace STRING {
-    export import contains = CONTAINS
-    export import remove = REMOVE 
-}
+export * from "./afterfix"
+export * from "./alphabet"
+export * from "./contains"
+export * from "./prefix"
+export * from "./remove"

@@ -2,11 +2,11 @@ import type { ILeftRight } from "../leftRight";
 import type { none } from "../option/main";
 
 import { LeftRight } from "../leftRight";
-import { Mapable } from "../mapable";
 import { panic } from "../../functions/panic";
+import { Mapable } from "../map/main";
 
 export type IUnpackable<T> = {
-    unpack: (errMsg?: string) => Mapable<T, unknown>;
+    unpack: (errMsg?: string) => Mapable<T>;
     unpack_or_with_diverging_type_from_the_original: <C>(
         d: () => C
     ) => ILeftRight<T, C>;
@@ -52,7 +52,7 @@ export class CustomUnpackable<T> implements IUnpackable<T> {
         return this.value;
     }
 
-    unpack(errorMsg?: string): Mapable<T, unknown> {
+    unpack(errorMsg?: string): Mapable<T> {
         if (!this.canBeUnpacked()) {
             if (errorMsg) {
                 panic(errorMsg);

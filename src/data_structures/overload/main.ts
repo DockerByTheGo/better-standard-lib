@@ -143,20 +143,20 @@ class OverloadBuilderWithCustomResolver<T extends ((v: unknown) => unknown)[], i
     }
 }
 
-OverloadBuilderWithCustomResolver
-    .new()
-    .addOverload((v: string) => { return "" })
-    .addOverload((v: number) => { return 1 })
-    .addResolver((overloads, v) => {
-        if(typeof v === "string") {
-            return overloads[0](v)
-        }
-        else {
-            return overloads[1](v)
-        }
-    })
-    .build()
-    .simpleMap(v => {
-        const h = v("")
-        return 
-    })
+// OverloadBuilderWithCustomResolver
+//     .new()
+//     .addOverload((v: string) => { return "" })
+//     .addOverload((v: number) => { return 1 })
+//     .addResolver((overloads, v) => {
+//         if(typeof v === "string") {
+//             return overloads[0](v)
+//         }
+//         else {
+//             return overloads[1](v)
+//         }
+//     })
+//     .build()
+//     .simpleMap(v => {
+//         const h = v("")
+//         return 
+//     })

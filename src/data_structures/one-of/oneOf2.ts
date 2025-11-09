@@ -1,6 +1,6 @@
-import type { Filter } from "../type-level-functions/union/filter";
+import { Filter } from "@better-standard-internal/type-level-functions";
+import { ifNotNone } from "../option";
 
-import { ifNotNone } from "./option";
 
 export namespace OneOf {
 

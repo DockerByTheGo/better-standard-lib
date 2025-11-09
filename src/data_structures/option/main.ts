@@ -108,7 +108,11 @@ export class Optionable<T>
 
     static new<T>(v: T | none): Optionable<T> {
 
-    return new Optionable(v)
+        return new Optionable(v)
+    }
+
+    static none<T>(): Optionable<T> {
+        return new Optionable(null)
     }
 }
 

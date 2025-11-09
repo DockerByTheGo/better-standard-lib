@@ -1,4 +1,3 @@
-import type { Validator } from "../utils/validator";
 
 export type ILeftRight<LeftType, RightType> = {
     handleLeft: <HandleLeftReturnType>(handler: (v: LeftType) => Promise<HandleLeftReturnType>) => Promise<this>;
