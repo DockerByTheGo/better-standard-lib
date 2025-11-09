@@ -5,15 +5,6 @@ type UnionToIntersection<U> =
     : never;
 
 
-type LastOf<U> =
-  UnionToIntersection<U extends any ? (x: U) => void : never> extends (x: infer L) => void
-    ? L
-    : never;
-
-type UnionToTuple<U, T extends any[] = []> =
-  [U] extends [never]
-    ? T
-    : UnionToTuple<Exclude<U, LastOf<U>>, [LastOf<U>, ...T]>;
 
 class Bae<Name extends string> {
   constructor(public readonly kind: Name) { }
