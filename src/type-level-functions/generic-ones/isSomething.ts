@@ -1,1 +1,1 @@
-export type IsSomething<T> = [T] extends [never] |[null] | [undefined] ? false : true;
+export type IsSomething<T> = [T] extends [never] | [null] | [undefined] ? false : true;
