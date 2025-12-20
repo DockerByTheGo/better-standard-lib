@@ -1,5 +1,5 @@
 import { ContextSafeType } from "@better-standard-internal/data_structures/baseContextSafeTypet";
-import { GetSet } from "@better-standard-internal/data_structures/getSetClass";
+import { GetSet } from "@better-standard-internal/data_structures/others/getSetClass";
 
 function hasExtension(s: string): boolean {
     return (

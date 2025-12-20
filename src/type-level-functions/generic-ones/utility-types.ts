@@ -1,9 +1,5 @@
-/**
- * Utility types that can be used throughout the codebase
- */
+import { Optionable } from "@better-standard-internal/data_structures/functional-patterns/option";
 
-
-import { Optionable } from "@better-standard-internal/data_structures/option/main";
 
 export type OptionalPromise<T> = Promise<Optionable<T>>;
 export type OPromise<T> = OptionalPromise<T>;
@@ -12,23 +8,13 @@ export type URecord = Record<string, unknown>;
 
 export type VoidCallback = () => void;
 
-export type UnknownString = string & { _brand?: never };
-
-// Type utilities for working with promises
-export type PromiseBoolean = Promise<boolean>;
-
 export type IfNotUndefinedWithDefault<T, D> = T extends undefined ? D : T;
 
-export type With<T, K extends keyof any, V> = T & {
-  [P in K]: V;
-};
+type IfAnyInternal<T, Y, N = never> =
+  0 extends (1 & T) ? Y : N;
 
-export type KeyOfOnlyStringKeys<T> = Extract<keyof T, string>;
+export type ifAny<TypeToCheck, Default> = IfAnyInternal<TypeToCheck, Default, TypeToCheck>;
 
-export type ValuesOf<T> = T[keyof T];
+type k = ifAny<{hi: string}, {}>
 
-export type Pair<T> = [T, T];
-
-export type RemoveNonStringKeys<T> = {
-  [K in keyof T as K extends string ? K : never]: T[K];
-};
+type l = ifAny<any, {data: string}>

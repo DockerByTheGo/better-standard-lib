@@ -3,7 +3,7 @@ export type Last<T extends readonly unknown[]> =
     ? L 
     : T extends readonly [infer R] 
       ? R
-      : never;
+      : null;
 
 
 const g = ["g", "g2"] as const;
