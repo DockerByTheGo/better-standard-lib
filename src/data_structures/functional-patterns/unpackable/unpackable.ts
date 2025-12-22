@@ -58,10 +58,14 @@ export class CustomUnpackable<T> implements IUnpackable<T> {
             if (errorMsg) {
                 panic(errorMsg);
             }
-
             throw new Error(this.cantUnpackMessage);
         }
         return new Mapable(this.value);
+    }
+
+
+    unpackRaw(){
+        return this.unpack().raw
     }
 
     unpack_or(default_handler: () => T): T {
