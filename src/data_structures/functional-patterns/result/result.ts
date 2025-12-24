@@ -1,4 +1,4 @@
-import { CustomUnpackable } from "./functional-patterns/unpackable/unpackable";
+import { CustomUnpackable } from "../unpackable/unpackable";
 
 export type ICustomError = {
     message: string;
@@ -52,7 +52,7 @@ export class Result<T, E extends Errors>
     }
 
     public static Ok<T, E extends Errors>(v: T): Result<T, E> {
-        return new Result<T, E>(new Optionable(v), new Optionable < E >(null));
+        return new Result<T, E>(new Optionable(v), new Optionable<E>(null));
     }
 
     public static NotOk<T, E extends Errors>(e: E): Result<T, E> {
@@ -94,7 +94,7 @@ export class Result<T, E extends Errors>
     }
 }
 
-export class ConcreteResult<T> extends Result<T, Errors> {}
+export class ConcreteResult<T> extends Result<T, Errors> { }
 
 export function objectEntries<T extends object>(obj: T): [keyof T, T[keyof T]][] {
     return Object.entries(obj) as [keyof T, T[keyof T]][];
@@ -122,7 +122,7 @@ type ObjectEntries<T> = Array<[keyof T, T[keyof T]]>;
 
 // Simple Optionable class for chaining
 class Optionable<T> {
-    constructor(private value: T | null) {}
+    constructor(private value: T | null) { }
 
     getValue(): T | null {
         return this.value;
@@ -222,3 +222,11 @@ errorResult.ifError({
     userNotFound: err => console.log(`User ${err.value.userId} not found`),
     validation: err => console.log(`Validation error on field: ${err.value.field}`),
 });
+
+
+
+
+
+
+
+

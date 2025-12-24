@@ -1,10 +1,10 @@
-import { objectEntries } from "./result";
+import { objectEntries } from "./functional-patterns/result";
 
 type extractParts<T extends string, Parts extends readonly [] = []> = T extends `${infer T} ${infer Rest}`
     ? extractParts<Rest, [...Parts, T]>
     : T extends ""
-        ? Parts
-        : [...Parts, T];
+    ? Parts
+    : [...Parts, T];
 
 type g = extractParts<"h k /">;
 
@@ -28,7 +28,7 @@ const a = g.getPart("g");
 const h = g.getParts();
 
 type Entry<T extends string> = Record<T, (v: string) => string>;
-export namespace AnotherSmartString{
+export namespace AnotherSmartString {
     export class V1<Entries extends Entry<string>> {
         private schema: Entries;
         public value: string;

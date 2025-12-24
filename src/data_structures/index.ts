@@ -8,7 +8,7 @@ export * from "./leftRight";
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/overload";
 export * from "./functional-patterns/pipe";
-export * from "./result";
+export * from "./functional-patterns/result";
 export * from "./returnFromVoid";
 export * from "./safestring";
 export * from "./others/tick";
