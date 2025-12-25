@@ -4,117 +4,13 @@ import { IMapable } from "../map";
 import { s, T } from "vitest/dist/reporters-5f784f42";
 import { Mapable } from "../map/main";
 import { map } from "@better-standard-internal/functions/map";
-
-class ResutError<TName extends string> {
-    constructor(public name: TName, public message: string) {
-
-    }
-
-    public readonly ok = false as const
-
-    throw() {
-        throw new Error(`${this.name}: ${this.message}`);
-    }
-}
+import { ResutError } from "./error";
+import { ResultSuccess } from "./success/implementations/Basic";
+import { IResultable } from "./types/IResult";
+import { BasicResult } from "./implementations/Basic";
 
 
 // remodel to use OneOf 
-
-class ResultSuccess<TSchema> {
-    public readonly ok = true as const
-    constructor(public readonly data: TSchema) { }
-}
-
-export interface IResultable<
-    TSuccess,
-    IErrors extends Record<string, ResutError<string>>
-> extends IMapable<IResultable<TSuccess, IErrors>> {
-    isOk(): this is ResultSuccess<TSuccess>;
-    isError(): this is IErrors[keyof IErrors];
-    ifError<TConfig extends { [K in keyof IErrors]: (v: IErrors[K]) => unknown }>(handlers: TConfig): Optionable<ReturnType<TConfig[keyof TConfig]>>;
-    ifSuccess<R>(fn: (v: TSuccess) => R): Optionable<R>;
-    try<
-        TErrorConfig extends { [K in keyof IErrors]: (arg: IErrors[K]) => unknown },
-        TSuccessHandler extends (arg: TSuccess) => unknown
-    >(
-        conf: {
-            ifError: TErrorConfig,
-            ifSuccess: TSuccessHandler
-        }
-    ): ReturnType<TErrorConfig[keyof TErrorConfig]> | ReturnType<TSuccessHandler>;
-    unwrapSuccess(): IMapable<TSuccess>;
-}
-
-
-
-
-class BasicResult<
-    TSuccess extends ResultSuccess<unknown>,
-    TErrors extends Record<string, ResutError<string>>
->
-
-    implements IResultable<TSuccess, TErrors> {
-
-    constructor(
-        private value: Or<[
-            TSuccess,
-            TErrors[keyof TErrors]
-        ]>
-    ) {
-    }
-
-    try<
-        TErrorConfig extends { [K in keyof TErrors]: (v: TErrors[K]) => unknown; },
-        TSuccessHandler extends (arg: TSuccess) => unknown
-    >(conf: {
-        ifError: TErrorConfig;
-        ifSuccess: TSuccessHandler;
-    }): ReturnType<TErrorConfig[keyof TErrorConfig]> | ReturnType<TSuccessHandler> {
-        if (this.isOk()) {
-            return conf.ifSuccess(this.value.data);
-        }
-        return conf.ifError(this.value);
-    }
-
-    ifError<TConfig extends { [K in keyof TErrors]: (v: TErrors[K]) => unknown; }>(handlers: TConfig): Optionable<ReturnType<TConfig[keyof TConfig]>> {
-        if (this.isError()) {
-            return new Optionable(handlers[this.value]);
-        }
-
-
-        return Optionable.none()
-    }
-
-    ifSuccess<R>(fn: (v: TSuccess) => R): Optionable<R> {
-        if (this.isOk()) {
-            return new Optionable(fn(this.value.data));
-        }
-    }
-
-    map<F>(func: (v: IResultable<TSuccess, TErrors>) => F): IMapable<F> {
-        return new Mapable(func(this));
-    }
-
-    isOk(): this is { ok: true; data: TSuccess } {
-        return "ok" in this.value && this.value.ok === true;
-    }
-
-    isError(): this is TErrors[keyof TErrors] {
-        return "message" in this.value;
-    }
-
-
-    unwrapSuccess(msg: Optionable<string> = Optionable.none()): IMapable<TSuccess> {
-        if (this.isOk()) {
-            return new Mapable(this.value.data);
-        }
-        throw new Error(msg.try({
-            ifNone: () => "Cannot unwrap success from an error result",
-            ifNotNone: v => v
-        }));
-    }
-
-}
 
 
 const noInternetError = new ResutError("NoInternetError", "No internet connection available");
@@ -202,17 +98,32 @@ namespace g {
         successSchema: TSuccess,
         errs: TErrors
     ) {
-        return class CustomResult extends BasicResult<TSuccess, TErrors> {
+
+
+        return {
+            class : class CustomResult extends BasicResult<TSuccess, TErrors> {
             constructor(val: Or<[TSuccess, TErrors[keyof TErrors]]>) {
                 super(val);
+   
+            }
+
+
+        static errors : {[K in keyof TErrors]: (msg: string) => CustomResult} = map({}, v => Object.entries(([propertyName, propertyValue]) => {
+            v[propertyName] = (msg: string) => new CustomResult(new ResutError<>(propertyName, msg))
+        }))
+
+            static cons = {
+                success: (v: TSuccess) => new CustomResult(v),
+                errors: 
             }
         }
+    }
     }
 
     const httpReqResult = buildResult(new httpResposeBuilder({}), { networkError: new networkError("") })
 
 
-    new httpReqResult({}).try({
+    new httpReqResult().try({
         ifSuccess: arg => arg.data,
         ifError: {
             "networkError": err => { }

@@ -68,13 +68,8 @@ export const statics = {
 };
 
 export class Optionable<T>
-    extends CustomUnpackable<T>
     implements Tick<CustomUnpackable<T>> {
-    constructor(v: T | none) {
-        super(v as T, (v) => {
-            return !this.is_none(); // ! chatbots will say this does not work ignore it, it works as expected
-        });
-        this.messageWhenYouCntUnpack = statics.messageForWhenOptionIsNone;
+    constructor(public value: T | none) {
     }
 
     public get optionValue(): T {}
@@ -93,6 +88,9 @@ export class Optionable<T>
         callback(this);
         return this;
     }
+
+   unwrapWithDefault = (def: T) => this.is_none() ? def : this.value
+   
 
     try<IfNonNoneReturnType, IfNoneReturnType>(options: {
         ifNotNone: (v: T) => IfNonNoneReturnType;
