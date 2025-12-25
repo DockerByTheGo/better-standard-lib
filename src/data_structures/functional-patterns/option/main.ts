@@ -1,7 +1,10 @@
 import type { Callback, VCallback } from "../../types/voidcallback";
-import type { IUnpackable } from "../unpackable/unpackable";
+import { IMapable, Mapable } from "../map";
+import { panic } from "../../../functions/panic";
+import { LeftRight, ILeftRight } from "../../leftRight";
 
-import { CustomUnpackable } from "../unpackable/unpackable";
+import type { IUnpackable } from "../unpackable/unpackable";
+import { IOptionable } from "./types";
 
 export type none = null | undefined;
 
@@ -22,60 +25,33 @@ export function Try<
     return config.ifNotNone(v);
 }
 
-
-// export class Optionable<T> implements IOptionable<T>{
-//     private value: T | none = null
-//     constructor(v: T | none) {
-//        this.value = v
-//     }
-
-//     unpack(): T {
-//         if (this.value === null || this.value === undefined) {
-//             throw new Error("Option is None")
-//         }
-//         return this.value
-//     }
-
-//     unpack_with_default(d: T): T{
-//         if (this.value === null || this.value === undefined) {
-//            return d
-//         }
-//         return this.value
-//     }
-//     is_none(): boolean{
-//         return this.value === undefined || this.value === null
-//     }
-
-//     unpack_or_with_diverging_type_from_the_original<C>(customHandler: () => C) : ILeftRight<Optionable<T>,Optionable<C>>{
-//         if (this.value === null) {
-//             return new LeftRight(new Optionable<T>(null),new Optionable(customHandler()))
-//         }
-//         return new LeftRight(new Optionable(this.value),new Optionable<C>(null))
-//    }
-
-//     unpack_or(default_handler: () => T): T{
-//         if (this.value === null || this.value === undefined) {
-//             return default_handler()
-//         }
-//         return this.value
-//    }
-// }
-
-// Plan -> write tests for this and then remake it to inherit since currently it will easier to test it whether it behaves cirrectly and if not debugging will be easier
-
 export const statics = {
     messageForWhenOptionIsNone: "Option is None ",
 };
 
-export class Optionable<T>
-    implements Tick<CustomUnpackable<T>> {
-    constructor(public value: T | none) {
+export class Optionable<T> implements IOptionable<T> {
+    private readonly value: T | null;
+    private readonly isNoneValue: boolean;
+
+    private constructor(value: T | null, isNone: boolean) {
+        this.value = value;
+        this.isNoneValue = isNone;
     }
 
-    public get optionValue(): T {}
+    static some<T>(v: T): Optionable<T> {
+        return new Optionable(v, false);
+    }
+
+    static none<T>(): Optionable<T> {
+        return new Optionable<T>(null, true);
+    }
 
     is_none(): boolean {
-        return this.value === null || this.value === undefined;
+        return this.isNoneValue;
+    }
+
+    isSome(): boolean {
+        return !this.isNoneValue;
     }
 
     ifNone(v: () => void): void {
@@ -84,40 +60,56 @@ export class Optionable<T>
         }
     }
 
-    tick(callback: VCallback<CustomUnpackable<T>>) {
-        callback(this);
-        return this;
-    }
-
-   unwrapWithDefault = (def: T) => this.is_none() ? def : this.value
-   
-
-    try<IfNonNoneReturnType, IfNoneReturnType>(options: {
-        ifNotNone: (v: T) => IfNonNoneReturnType;
-        ifNone: () => IfNoneReturnType;
-    }): IfNonNoneReturnType | IfNoneReturnType {
+    unpack(errMsg?: string): Mapable<T> {
         if (this.is_none()) {
-            return options.ifNone();
+            panic(errMsg ?? statics.messageForWhenOptionIsNone);
         }
-        else {
-            return options.ifNotNone(this.value);
-        }
+        return new Mapable(this.value as T);
     }
 
-    static new<T>(v: T | none): Optionable<T> {
-
-        return new Optionable(v)
+    unpack_or(default_handler: () => T): T {
+        return this.is_none() ? default_handler() : this.value as T;
     }
 
-    static none<T>(): Optionable<T> {
-        return new Optionable(null)
+    unpack_with_default(d: T): T {
+        return this.is_none() ? d : this.value as T;
+    }
+
+    unpack_or_with_diverging_type_from_the_original<C>(d: () => C): ILeftRight<T, C> {
+        if (this.is_none()) {
+            return new LeftRight(null as T, d());
+        }
+        return new LeftRight(this.value as T, null as C);
+    }
+
+    expect(msg: string): IMapable<T> {
+        if (this.is_none()) {
+            panic(msg);
+        }
+        return new Mapable(this.value as T);
+    }
+
+    ifCanBeUnpacked(handler: (v: T) => void): void {
+        if (this.isSome()) {
+            handler(this.value as T);
+        }
+    }
+    
+    map<U>(fn: (v: T) => U): Optionable<U> {
+        return this.is_none() ? Optionable.none() : Optionable.some(fn(this.value as T));
+    }
+
+    flatMap<U>(fn: (v: T) => Optionable<U>): Optionable<U> {
+        return this.is_none() ? Optionable.none() : fn(this.value as T);
     }
 }
 
 export function mapOptionable<T>(v: T | none): Optionable<T> {
-    return new Optionable(v)
+    return v === null || v === undefined ? Optionable.none() : Optionable.some(v);
 }
 
 export function ifNotNone<T>(v: T | none, callback: (v: T) => void) {
-    return new Optionable(v as T).ifCanBeUnpacked(callback);
+    const option = mapOptionable(v);
+    option.ifCanBeUnpacked(callback);
+    return option;
 }
