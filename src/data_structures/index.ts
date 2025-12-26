@@ -6,6 +6,7 @@ export * from "./others/getSetClass";
 export * from "./group";
 export * from "./leftRight";
 export * from "./functional-patterns/map";
+export * from "./functional-patterns/option";
 export * from "./functional-patterns/overload";
 export * from "./functional-patterns/pipe";
 export * from "./functional-patterns/result";

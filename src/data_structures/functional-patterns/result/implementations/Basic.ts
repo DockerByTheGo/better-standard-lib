@@ -1,5 +1,5 @@
 import { Or } from "@better-standard-internal/types";
-import { ResutError } from "../error";
+import { IResultError, ResultError } from "../error";
 import { ResultSuccess } from "../success/implementations/Basic";
 import { IResultable } from "../types/IResult";
 import { Optionable, OptionableString } from "../../option";
@@ -8,7 +8,7 @@ import { IResultSucess } from "../success";
 
 export class BasicResult<
     TSuccess extends ResultSuccess<unknown>,
-    TErrors extends Record<string, ResutError<string>>
+    TErrors extends Record<string, ResultError<string>>
 >
 
     implements IResultable<TSuccess, TErrors> {
@@ -69,12 +69,22 @@ export class BasicResult<
         return "message" in this.value;
     }
 
-
+    // you just provide the schema no need to provide a ResultResponse object
     static RawSuccess = <TSchema>(v: TSchema) => new BasicResult(ResultSuccess.new(v))
 
-    static Error = <T extends ResutError<string>>(v: T) => new BasicResult(v)
+    // same ass success but for error 
+    static RawError = <TName extends string>(name: TName, msg: string) => new ResultError(name, msg)
 
-    static Succes = <T extends IResultSucess<unknown>>(v: T) => new BasicResult(v)
+    static Error = <T extends ResultError<string>>(v: T) => new BasicResult<{}, {[x in T["TGetName"]]: T}>(v)
 
-    static RawError = <TName extends string>(name: TName, msg: string) => new ResutError(name, msg)
+    static Succes = <T extends IResultSucess<unknown>>(v: T) => new BasicResult<T, {}>(v)
+
+}
+
+
+
+
+
+export class BasicResultBuilder<TSucess, TErrors> {
+    addError<T extends IResultError<string>>() {}
 }

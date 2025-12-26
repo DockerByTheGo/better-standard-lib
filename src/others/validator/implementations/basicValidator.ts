@@ -5,14 +5,7 @@ import { ifNotNone, Try } from "@better-standard-internal/data_structures/functi
 import { OneOf } from "@better-standard-internal/data_structures/functional-patterns/one-of";
 import { TypeMarker } from "@better-standard-internal/data_structures";
 import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
-import { map } from "@better-standard-internal/functions/map";
-import { Boolean } from "@better-standard-internal/others/boolean";
 import { IResultSucess } from "@better-standard-internal/data_structures/functional-patterns/result/success";
-
-
-export interface Value<T extends "string" | "number" | "null" = "string"> {
-    type: T
-}
 
 
 class StringValue extends TypeMarker<"string"> {
@@ -36,10 +29,7 @@ export type GetShapeFromSchema<T extends Schema> = {
 }
 
 export class BasicValidator<TSchema extends Schema> implements IValidator<GetShapeFromSchema<TSchema>> {
-    constructor(public readonly schema: TSchema) {
-
-
-    }
+    constructor(public readonly schema: TSchema) {}
 
     validateWhichThrows(v: GetShapeFromSchema<TSchema>): GetShapeFromSchema<TSchema> {
         return this.validate(v).unpack()

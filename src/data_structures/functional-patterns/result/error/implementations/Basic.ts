@@ -1,6 +1,6 @@
 import { IResultError } from "../types";
 
-export class ResutError<TName extends string> implements IResultError<TName> {
+export class ResultError<TName extends string> implements IResultError<TName> {
     constructor(public name: TName, public message: string) {
 
     }
