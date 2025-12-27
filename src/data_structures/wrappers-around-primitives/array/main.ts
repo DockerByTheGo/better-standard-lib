@@ -1,14 +1,15 @@
-import { First, Push } from "@better-standard-internal/type-level-functions";
+import type { First, Push } from "@better-standard-internal/type-level-functions";
 
 export class TypeSafeArray<
   T extends readonly Schema[],
-  Schema = unknown
+  Schema = unknown,
 > {
   private data: Schema[];
 
   private constructor(data: Schema[]) {
     this.data = data;
   }
+
   static empty<Schema>(): TypeSafeArray<[], Schema> {
     return new TypeSafeArray<[], Schema>([]);
   }
@@ -63,4 +64,4 @@ export class TypeSafeArray<
 
 const g = TypeSafeArray.of("a" as const, "b" as const, "c" as const).add("d" as const).add("e" as const);
 
-g.first
+g.first;

@@ -1,7 +1,7 @@
 import type { Optionable } from "../data_structures/option";
 
 type Optional<T extends Record<string, unknown>> = {
-    [Entry in keyof T]: Optionable<T[Entry]>
+  [Entry in keyof T]: Optionable<T[Entry]>
 };
 
 // exmaple usage

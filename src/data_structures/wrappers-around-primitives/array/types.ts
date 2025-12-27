@@ -1,1 +1,1 @@
-export type ooo = ""
+export type ooo = "";

@@ -1,16 +1,15 @@
-import { IResultError } from "../types";
+import type { IResultError } from "../types";
 
 export class ResultError<TName extends string> implements IResultError<TName> {
-    constructor(public name: TName, public message: string) {
+  constructor(public name: TName, public message: string) {
 
-    }
+  }
 
-    TGetName: TName;
-    
+  TGetName: TName;
 
-    public readonly ok = false as const
+  public readonly ok = false as const;
 
-    throw() {
-        throw new Error(`${this.name}: ${this.message}`);
-    }
+  throw() {
+    throw new Error(`${this.name}: ${this.message}`);
+  }
 }

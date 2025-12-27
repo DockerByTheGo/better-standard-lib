@@ -1,1 +1,1 @@
-export* from "./IError"
+export * from "./IError";

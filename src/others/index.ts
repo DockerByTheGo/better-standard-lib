@@ -1,2 +1,2 @@
-export * from "./function"
-export* from "./validator"
+export * from "./function";
+export * from "./validator";

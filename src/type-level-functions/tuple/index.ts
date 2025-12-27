@@ -1,3 +1,3 @@
-export * from "./getFirst"
-export * from "./getLast"
-export * from "./push"
+export * from "./getFirst";
+export * from "./getLast";
+export * from "./push";

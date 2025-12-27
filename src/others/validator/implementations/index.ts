@@ -1,1 +1,1 @@
-export * from "./basicValidator"
+export * from "./basicValidator";

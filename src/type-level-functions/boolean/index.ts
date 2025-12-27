@@ -1,2 +1,2 @@
-export * from "./isBoolean"
-export * from "./promise"
+export * from "./isBoolean";
+export * from "./promise";

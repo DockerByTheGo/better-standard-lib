@@ -1,7 +1,7 @@
-export interface IWithShape<T> {
-    shape: T
-}
+export type IWithShape<T> = {
+  shape: T;
+};
 
 export abstract class Shape {
-    static getShape: unknown
+  static getShape: unknown;
 }

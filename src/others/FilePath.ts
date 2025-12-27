@@ -1,29 +1,29 @@
 export class FilePath<T extends string = string> {
-    constructor(public readonly value: string) {
+  constructor(public readonly value: string) {
 
-    }
+  }
 
-    getParts = this.value.split("/");
+  getParts = this.value.split("/");
 
-    exists() {
-        return true
-    }
+  exists() {
+    return true;
+  }
 
-    create() { }
+  create() { }
 
-    delete() { }
+  delete() { }
 }
 
 class FilePathBuilder {
-    private readonly parts: string[] = [];
-    constructor(private initial: string) { }
+  private readonly parts: string[] = [];
+  constructor(private initial: string) { }
 
-    addPart(part: string) {
-        this.parts.push("/" + part);
-        return this;
-    }
+  addPart(part: string) {
+    this.parts.push(`/${part}`);
+    return this;
+  }
 
-    build() {
-        return new FilePath(this.parts.join(""));
-    }
+  build() {
+    return new FilePath(this.parts.join(""));
+  }
 }

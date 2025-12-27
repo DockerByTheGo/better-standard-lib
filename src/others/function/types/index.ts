@@ -1,1 +1,1 @@
-export * from "./IFunc"
+export * from "./IFunc";

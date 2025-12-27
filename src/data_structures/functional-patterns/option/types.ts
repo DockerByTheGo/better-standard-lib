@@ -1,5 +1,5 @@
-import { IUnpackable } from "../unpackable/unpackable";
+import type { IUnpackable } from "../unpackable/unpackable";
 
 export type IOptionable<T> = {
-    is_none: () => boolean;
+  is_none: () => boolean;
 } & IUnpackable<T>;

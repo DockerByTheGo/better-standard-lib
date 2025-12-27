@@ -1,6 +1,7 @@
-import { IMapable } from "@better-standard-internal/data_structures/functional-patterns/map";
-import { IWithShape } from "../../WithShape";
+import type { IMapable } from "@better-standard-internal/data_structures/functional-patterns/map";
 
-export interface IBase<T> extends IWithShape<T>, IMapable<T> {
-    
-}
+import type { IWithShape } from "../../WithShape";
+
+export type IBase<T> = {
+
+} & IWithShape<T> & IMapable<T>;

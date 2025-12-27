@@ -1,1 +1,1 @@
-export * from "./Or"
+export * from "./Or";

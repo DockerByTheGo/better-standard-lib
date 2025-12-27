@@ -30,14 +30,14 @@ const failure = Err("Something went wrong");
 
 // Pattern matching
 const value = success.match({
-    Ok: val => val,
-    Err: err => 0
+  Ok: val => val,
+  Err: err => 0
 });
 
 // Chaining operations
 const result = success
-    .map(val => val * 2)
-    .mapErr(err => `Error: ${err}`);
+  .map(val => val * 2)
+  .mapErr(err => `Error: ${err}`);
 ```
 
 ### Error Handling
@@ -46,16 +46,16 @@ const result = success
 import { Err, Ok, Result } from "better-standard";
 
 function divide(a: number, b: number): Result<number, string> {
-    if (b === 0) {
-        return Err("Cannot divide by zero");
-    }
-    return Ok(a / b);
+  if (b === 0) {
+    return Err("Cannot divide by zero");
+  }
+  return Ok(a / b);
 }
 
 // Using the function
 const result = divide(10, 2)
-    .andThen(val => divide(val, 0))
-    .mapErr(err => `Calculation failed: ${err}`);
+  .andThen(val => divide(val, 0))
+  .mapErr(err => `Calculation failed: ${err}`);
 ```
 
 ### TypeScript Integration
@@ -64,22 +64,22 @@ const result = divide(10, 2)
 import { Err, Ok, Result } from "better-standard";
 
 type User = {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 };
 
 function fetchUser(id: number): Result<User, string> {
-    // Implementation
-    return Ok({ id, name: "John Doe" });
+  // Implementation
+  return Ok({ id, name: "John Doe" });
 }
 
 // Type-safe error handling
 const user = fetchUser(1)
-    .map(user => ({
-        ...user,
-        fullName: user.name
-    }))
-    .unwrapOrThrow();
+  .map(user => ({
+    ...user,
+    fullName: user.name
+  }))
+  .unwrapOrThrow();
 ```
 
 ## Contributing

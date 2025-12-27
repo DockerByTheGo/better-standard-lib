@@ -1,5 +1,4 @@
-
-export interface IResultSucess<TSchema>{
-    data: TSchema
-    ok: true
-}
+export type IResultSucess<TSchema> = {
+  data: TSchema;
+  ok: true;
+};

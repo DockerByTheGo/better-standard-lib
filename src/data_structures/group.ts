@@ -5,57 +5,57 @@ import type { ZodObject, ZodRawShape } from "zod";
 import z from "zod";
 
 export class GroupBuilder<T extends readonly unknown[], InitialState extends ZodObject<ZodRawShape>> {
-    private readonly funcs: T;
-    private state: InitialState;
+  private readonly funcs: T;
+  private state: InitialState;
 
-    constructor(funcs: T, state: InitialState) {
-        this.funcs = funcs;
-        this.state = state;
-    }
+  constructor(funcs: T, state: InitialState) {
+    this.funcs = funcs;
+    this.state = state;
+  }
 
-    addFunc<R>(v: (state: z.infer<InitialState>) => R) {
-        return new GroupBuilder([...this.funcs, v], this.state);
-    }
+  addFunc<R>(v: (state: z.infer<InitialState>) => R) {
+    return new GroupBuilder([...this.funcs, v], this.state);
+  }
 
-    build(): (v: z.infer<InitialState>) => void {
-        return v => this.funcs.forEach(func => func(v));
-    }
+  build(): (v: z.infer<InitialState>) => void {
+    return v => this.funcs.forEach(func => func(v));
+  }
 }
 
 const group = new GroupBuilder([], z.object({
-    dockerImage: z.string(),
-    port: z.number(),
+  dockerImage: z.string(),
+  port: z.number(),
 }))
-    .addFunc((state) => {
-        state.dockerImage = "dockerImage";
-    })
-    .addFunc((state) => {
-        state.port = 1;
-    })
-    .build();
+  .addFunc((state) => {
+    state.dockerImage = "dockerImage";
+  })
+  .addFunc((state) => {
+    state.port = 1;
+  })
+  .build();
 
 // group({dockerImage: "", port: 1})
 
-    type IsNever<T> = [T] extends [never] ? true : false;
-    type IfNeverWithDefault<T, Default> = IsNever<T> extends true ? Default : T;
-    type IfNeverWithDefaultEmpty<T> = IfNeverWithDefault<T, {}>;
+type IsNever<T> = [T] extends [never] ? true : false;
+type IfNeverWithDefault<T, Default> = IsNever<T> extends true ? Default : T;
+type IfNeverWithDefaultEmpty<T> = IfNeverWithDefault<T, {}>;
 
 export class GroupBuilderZodlessAccumelating<T extends readonly unknown[], InitialState extends Record<string, unknown>> {
-    private readonly funcs: T;
-    private state: InitialState;
+  private readonly funcs: T;
+  private state: InitialState;
 
-    constructor(funcs: T, state: InitialState) {
-        this.funcs = funcs;
-        this.state = state;
-    }
+  constructor(funcs: T, state: InitialState) {
+    this.funcs = funcs;
+    this.state = state;
+  }
 
-    addFunc<R>(v: (state: InitialState & ReturnType<IfNeverWithDefaultEmpty<T[T["length"]]>>) => R) {
-        return new GroupBuilderZodlessAccumelating([...this.funcs, v], this.state);
-    }
+  addFunc<R>(v: (state: InitialState & ReturnType<IfNeverWithDefaultEmpty<T[T["length"]]>>) => R) {
+    return new GroupBuilderZodlessAccumelating([...this.funcs, v], this.state);
+  }
 
-    build(): (v: InitialState) => void {
-        return v => this.funcs.forEach(func => func(v));
-    }
+  build(): (v: InitialState) => void {
+    return v => this.funcs.forEach(func => func(v));
+  }
 }
 
 // const group = new GroupBuilderZodlessAccumelating([], {

@@ -1,2 +1,2 @@
-export * from "./NormalFunction"
-export * from "./RelativelySimpleFunc"
+export * from "./NormalFunction";
+export * from "./RelativelySimpleFunc";
