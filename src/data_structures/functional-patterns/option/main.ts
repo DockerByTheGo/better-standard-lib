@@ -48,6 +48,13 @@ export class Optionable<T> implements IOptionable<T> {
     return new Optionable<T>(null, true);
   }
 
+  try<TNoneReturn, TSomeReturn>( v: {
+    ifNone: () => TNoneReturn,
+    ifNotNone: (v: T) => TSomeReturn 
+  }) {
+    return this.is_none() ? v.ifNone() : v.ifNotNone(this.value)
+  }
+
   is_none(): boolean {
     return this.isNoneValue;
   }

@@ -5,6 +5,7 @@ import type { IResultable } from "./types/IResult";
 import { ResultError } from "./error";
 import { BasicResult } from "./implementations/Basic";
 import { ResultSuccess } from "./success/implementations/Basic";
+import { Schema } from "@better-standard-internal/others";
 
 // remodel to use OneOf
 
@@ -30,118 +31,99 @@ namespace p {
   });
 }
 // -----
-// implicit sigs
-namespace f {
-  function SendHttpReq() {
-    if (Math.random() > 0.5)
-      return new BasicResult(new ResultError("NetworkError", "Failed to connect to server"));
-    return BasicResult.RawSuccess(({ hi: "" }));
-  }
-
-  export const result = SendHttpReq();
-  //  damn this didnt work out well
+export function buildError<TName extends string>(name: TName) {
+  return class CustomError extends ResultError<TName> {
+    constructor(message: string) {
+      super(name, message);
+    }
+  };
 }
 
-// another try at achieving this
-function SendHttpReq2() {
-  if (Math.random() > 0.5)
-    return { networkError: (new ResultError("NetworkError", "Failed to connect to server")) };
-  return ({ ok: true, data: { status: 200, body: "Hello, world!" } });
+export function buildErrorReturningObject<TName extends string>(name: TName) {
+  return class CustomError extends ResultError<TName> {
+    constructor(message: string) {
+      super(name, message);
+    }
+  };
 }
 
-new BasicResult(SendHttpReq2()).try({
-  ifError: {
+const networkError = buildError("networkError");
 
-  },
-  ifSuccess: v => v.body,
-});
+function buildSuccess<TSuccess extends Schema>(schema: TSuccess) {
+  return class CustomSuccess extends ResultSuccess<TSuccess> {
+    constructor(val: TSuccess) {
+      super(val);
+    }
+  };
+}
 
-// ok getting close
-namespace g {
-  function buildError<TName extends string>(name: TName) {
-    return class CustomError extends ResultError<TName> {
-      constructor(message: string) {
-        super(name, message);
-      }
-    };
-  }
+const httpResposeBuilder = buildSuccess({ status: , body: {} });
 
-  const networkError = buildError("networkError");
+export function buildResult<
+  TSuccess extends ResultSuccess<unknown>,
+  TErrors extends Record<string, ResultError<string>>,
+>(
+  successSchema: TSuccess,
+  errs: TErrors,
+) {
+  const errsConstrcutors: { [ErrorName in keyof TErrors]: (msg: string) => TErrors[ErrorName] } = {};
 
-  function buildSuccess<TSuccess>(schema: TSuccess) {
-    return class CustomSuccess extends ResultSuccess<TSuccess> {
-      constructor(val: TSuccess) {
+  const constructors = {
+    errors: { ...errsConstrcutors },
+  };
+
+  return {
+    class: class CustomResult extends BasicResult<TSuccess, TErrors> {
+      constructor(val: Or<[TSuccess, TErrors[keyof TErrors]]>) {
         super(val);
       }
-    };
-  }
 
-  const httpResposeBuilder = buildSuccess({ status: 1, body: {} });
-
-  function buildResult<
-    TSuccess extends ResultSuccess<unknown>,
-    TErrors extends Record<string, ResultError<string>>,
-  >(
-    successSchema: TSuccess,
-    errs: TErrors,
-  ) {
-    const errsConstrcutors: { [ErrorName in keyof TErrors]: (msg: string) => TErrors[ErrorName] } = {};
-
-    const constructors = {
-      errors: { ...errsConstrcutors },
-    };
-
-    return {
-      class: class CustomResult extends BasicResult<TSuccess, TErrors> {
-        constructor(val: Or<[TSuccess, TErrors[keyof TErrors]]>) {
-          super(val);
-        }
-
-        static cons = {
-          success: {
-            fromSuccess: (v: TSuccess) => new CustomResult(v),
-            raw: (v: TSuccess["data"]) => new CustomResult(new ResultSuccess(v)),
+      static cons = {
+        success: {
+          fromSuccess: (v: TSuccess) => new CustomResult(v),
+          raw: (v: TSuccess["data"]) => new CustomResult(new ResultSuccess(v)),
+        },
+        errors: {
+          from(v: TErrors[keyof TErrors]["name"], msg: string) {
+            return new CustomResult(v);
           },
-          errors: {
-            from(v: TErrors[keyof TErrors]["name"], msg: string) {
-              return new CustomResult(v);
-            },
-            definite: {
-              ...Object
-                .entries(errs)
-                .reduce((prev, [errorName, error]) => {
-                  return prev[errorName] = (msg: string) => error;
-                }, {}),
-            } as { [ErrorName in keyof TErrors]: (msg: string) => TErrors[ErrorName] },
-          },
-          new: (v: TSuccess | TErrors[keyof TErrors]) => new CustomResult(v),
-        };
-      },
-      constructors,
-    };
-  }
-
-  const httpReqResult = buildResult(new httpResposeBuilder({}), { networkError: new networkError("") });
-
-  httpReqResult.class.cons.success.fromSuccess(new ResultSuccess({ body: {}, status: 3 })).try({
-    ifSuccess: arg => arg.data,
-    ifError: {
-      networkError: (err) => { },
+          definite: {
+            ...Object
+              .entries(errs)
+              .reduce((prev, [errorName, error]) => {
+                return prev[errorName] = (msg: string) => error;
+              }, {}),
+          } as { [ErrorName in keyof TErrors]: (msg: string) => TErrors[ErrorName] },
+        },
+        new: (v: TSuccess | TErrors[keyof TErrors]) => new CustomResult(v),
+      };
     },
-  });
-
-  const f = httpReqResult.class.cons.errors.definite.networkError("host is unreachable");
-  httpReqResult.class.cons.errors.from("networkError", "");
-
-  httpReqResult.constructors.errors.networkError("l");
-
-  const SendHttpReq3 = () => (Math.random() > 0.5) ? new networkError("") : new httpResposeBuilder({ status: 200, body: {} });
-
-  new httpReqResult.class(SendHttpReq3()).try({
-    ifError: {
-      networkError: e => e.throw(),
-    },
-    ifSuccess: res => res.data,
-  });
-
+    constructors,
+  };
 }
+
+
+
+
+const httpReqResult = buildResult(new httpResposeBuilder({}), { networkError: new networkError("") });
+
+httpReqResult.class.cons.success.fromSuccess(new ResultSuccess({ body: {}, status: 3 })).try({
+  ifSuccess: arg => arg.data,
+  ifError: {
+    networkError: (err) => { },
+  },
+});
+
+const f = httpReqResult.class.cons.errors.definite.networkError("host is unreachable");
+httpReqResult.class.cons.errors.from("networkError", "");
+
+httpReqResult.constructors.errors.networkError("l");
+
+const SendHttpReq3 = () => (Math.random() > 0.5) ? new networkError("") : new httpResposeBuilder({ status: 200, body: {} });
+
+new httpReqResult.class(SendHttpReq3()).try({
+  ifError: {
+    networkError: e => e.throw(),
+  },
+  ifSuccess: res => res.data,
+});

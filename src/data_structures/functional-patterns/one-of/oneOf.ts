@@ -26,6 +26,10 @@ export function OneOf<T extends TypeMarker<string>[]>(
     getType() {
       return this.value.type;
     }
+
+    static cons = {
+
+    }
   };
 }
 

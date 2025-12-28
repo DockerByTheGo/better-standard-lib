@@ -6,11 +6,12 @@ import type { URecord } from "@better-standard-internal/type-level-functions";
 import { TypeMarker } from "@better-standard-internal/data_structures";
 
 import type { IFunc } from "../types";
+import { BasicValidator, GetShapeFromSchema, Schema } from "@better-standard-internal/others/validator";
 
 export class RelativelySimpleFunction<
 
   TName extends string,
-  TArgs extends URecord,
+  TArgs extends Schema,
   TReturn,
 > extends TypeMarker<"RelativelySimpleFunc">
   implements IFunc<
@@ -31,8 +32,12 @@ export class RelativelySimpleFunction<
   TGetFunction: (args: TArgs) => TReturn;
   TGetName: TName;
 
-  execute(arg: TArgs): BasicResult<ResultSuccess<TReturn>, { schemaMismatch: IResultError<"schemaMismatch"> }> {
+  execute(arg: GetShapeFromSchema<TArgs>): BasicResult<
+  ResultSuccess<TReturn>,
+  { schemaMismatch: IResultError<"schemaMismatch"> }
+  > {
     // you need to make validation
+    new BasicValidator(this.schema).validate(arg)
     return this.fn(arg);
   }
 
