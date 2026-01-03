@@ -5,7 +5,9 @@ import type { IResultable } from "./types/IResult";
 import { ResultError } from "./error";
 import { BasicResult } from "./implementations/Basic";
 import { ResultSuccess } from "./success/implementations/Basic";
-import { Schema } from "@better-standard-internal/others";
+import { GetShapeFromSchema } from "@better-standard-internal/others/validator/schema/utils";
+import { Schema } from "@better-standard-internal/others/validator/schema/types";
+import { Arguments } from "@better-standard-internal/others/validator/schema";
 
 // remodel to use OneOf
 
@@ -39,63 +41,66 @@ export function buildError<TName extends string>(name: TName) {
   };
 }
 
-export function buildErrorReturningObject<TName extends string>(name: TName) {
-  return class CustomError extends ResultError<TName> {
-    constructor(message: string) {
-      super(name, message);
+export function buildErrorReturningObject<TName extends string>(name: TName): { [K in TName]: new (message: string) => ResultError<TName> } {
+  return {
+    [name]: class CustomError extends ResultError<TName> {
+      constructor(message: string) {
+        super(name, message);
+      }
     }
-  };
+  } as { [K in TName]: new (message: string) => ResultError<TName> };
 }
 
 const networkError = buildError("networkError");
 
-function buildSuccess<TSuccess extends Schema>(schema: TSuccess) {
-  return class CustomSuccess extends ResultSuccess<TSuccess> {
-    constructor(val: TSuccess) {
+export function buildSuccess<TSuccess extends Schema>(schema: TSuccess) {
+  return class CustomSuccess extends ResultSuccess<GetShapeFromSchema<TSuccess>> {
+    constructor(val: GetShapeFromSchema<TSuccess>) {
       super(val);
     }
   };
 }
 
-const httpResposeBuilder = buildSuccess({ status: , body: {} });
+const httpResposeBuilder = buildSuccess({ status: { type: Arguments.otherCons("string") }, body: { type: Arguments.otherCons("string") } });
 
 export function buildResult<
-  TSuccess extends ResultSuccess<unknown>,
-  TErrors extends Record<string, ResultError<string>>,
+  TSuccessData,
+  TErrorNames extends string,
 >(
-  successSchema: TSuccess,
-  errs: TErrors,
+  successClass: new (data: TSuccessData) => ResultSuccess<TSuccessData>,
+  errorClasses: Record<TErrorNames, new (msg: string) => ResultError<TErrorNames>>,
 ) {
-  const errsConstrcutors: { [ErrorName in keyof TErrors]: (msg: string) => TErrors[ErrorName] } = {};
+  const errorConstructors: { [ErrorName in keyof typeof errorClasses]: (msg: string) => InstanceType<typeof errorClasses[ErrorName]> } = {};
 
   const constructors = {
-    errors: { ...errsConstrcutors },
+    errors: { ...errorConstructors },
   };
 
   return {
-    class: class CustomResult extends BasicResult<TSuccess, TErrors> {
-      constructor(val: Or<[TSuccess, TErrors[keyof TErrors]]>) {
+    class: class CustomResult extends BasicResult<ResultSuccess<TSuccessData>, Record<TErrorNames, ResultError<TErrorNames>>> {
+      constructor(val: Or<[ResultSuccess<TSuccessData>, ResultError<TErrorNames>]>) {
         super(val);
       }
 
       static cons = {
         success: {
-          fromSuccess: (v: TSuccess) => new CustomResult(v),
-          raw: (v: TSuccess["data"]) => new CustomResult(new ResultSuccess(v)),
+          fromSuccess: (v: ResultSuccess<TSuccessData>) => new CustomResult(v),
+          raw: (v: TSuccessData) => new CustomResult(new successClass(v)),
         },
         errors: {
-          from(v: TErrors[keyof TErrors]["name"], msg: string) {
-            return new CustomResult(v);
+          from(v: TErrorNames, msg: string) {
+            return new CustomResult(new errorClasses[v](msg));
           },
           definite: {
             ...Object
-              .entries(errs)
-              .reduce((prev, [errorName, error]) => {
-                return prev[errorName] = (msg: string) => error;
-              }, {}),
-          } as { [ErrorName in keyof TErrors]: (msg: string) => TErrors[ErrorName] },
+              .entries(errorClasses)
+              .reduce((prev, [errorName, ErrorClass]) => {
+                prev[errorName as TErrorNames] = (msg: string) => new ErrorClass(msg);
+                return prev;
+              }, {} as { [K in TErrorNames]: (msg: string) => ResultError<TErrorNames> }),
+          },
         },
-        new: (v: TSuccess | TErrors[keyof TErrors]) => new CustomResult(v),
+        new: (v: ResultSuccess<TSuccessData> | ResultError<TErrorNames>) => new CustomResult(v),
       };
     },
     constructors,
@@ -105,7 +110,7 @@ export function buildResult<
 
 
 
-const httpReqResult = buildResult(new httpResposeBuilder({}), { networkError: new networkError("") });
+const httpReqResult = buildResult(httpResposeBuilder, { networkError });
 
 httpReqResult.class.cons.success.fromSuccess(new ResultSuccess({ body: {}, status: 3 })).try({
   ifSuccess: arg => arg.data,

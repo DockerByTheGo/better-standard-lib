@@ -21,4 +21,4 @@ export type IResultable<
     },
   ) => ReturnType<TErrorConfig[keyof TErrorConfig]> | ReturnType<TSuccessHandler>;
   unpack: () => TSuccess["data"];
-} & IMapable<IResultable<TSuccess, IErrors>>;
+} 

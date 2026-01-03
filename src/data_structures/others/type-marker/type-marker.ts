@@ -1,3 +1,5 @@
+import { Constructor } from "@better-standard-internal/others/addStaticConstrucots/main";
+
 export class TypeMarker<T extends string> {
   constructor(public readonly type: T) {
 
@@ -13,3 +15,17 @@ export class TypeMarker<T extends string> {
 export type ITypeMarked<T extends string> = {
   typeInfo: TypeMarker<T>;
 };
+
+
+export function createTypeMarked<TName extends string>(name :TName): {[name in TName]: Constructor<TypeMarker<TName>>} {
+  return {
+    [name]: class extends TypeMarker<TName> {
+      constructor(){
+        super(name)
+      }
+    }
+  }
+}
+
+
+const {koko} = createTypeMarked("koko") // so that we do not have to type twice 

@@ -8,13 +8,17 @@ import { Mapable } from "../../map/main";
 import { Optionable } from "../../option";
 import { ResultError } from "../error";
 import { ResultSuccess } from "../success/implementations/Basic";
+import { TypeError } from "@better-standard-internal/type-level-functions/error";
+import { map } from "@better-standard-internal/functions";
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
 export class BasicResult<
   TSuccess extends ResultSuccess<unknown>,
   TErrors extends Record<string, ResultError<string>>,
 >
 
-implements IResultable<TSuccess, TErrors> {
+  implements IResultable<TSuccess, TErrors> {
   constructor(
     private value: Or<[
       TSuccess,
@@ -31,6 +35,17 @@ implements IResultable<TSuccess, TErrors> {
     return this.value.data;
   }
 
+  static fromUnion<T>(b: T): BasicResult<
+    T extends ResultSuccess<infer U> ? ResultSuccess<U> : never,
+    UnionToIntersection<T extends ResultError<infer N> ? Record<N, ResultError<N>> : {}>
+  > {
+    if ((b as any).ok) {
+      return new BasicResult(b as any);
+    } else {
+      return new BasicResult(b as any);
+    }
+  }
+
   try<
     TErrorConfig extends { [K in keyof TErrors]: (v: TErrors[K]) => unknown; },
     TSuccessHandler extends (arg: TSuccess) => unknown,
@@ -38,11 +53,9 @@ implements IResultable<TSuccess, TErrors> {
     ifError: TErrorConfig;
     ifSuccess: TSuccessHandler;
   },
-  ): ReturnType<TErrorConfig[keyof TErrorConfig]> | ReturnType<TSuccessHandler> {
-    if (this.isOk()) {
-      return conf.ifSuccess(this.value.data);
-    }
-    return conf.ifError(this.value);
+  ): Mapable<ReturnType<TErrorConfig[keyof TErrorConfig]> | ReturnType<TSuccessHandler>> {
+
+    return map(this.isOk() ? conf.ifSuccess(this.value.data) : conf.ifError[this.value.name](this.value), Mapable.new)
   }
 
   ifError<TConfig extends { [K in keyof TErrors]: (v: TErrors[K]) => unknown; }>(handlers: TConfig): Optionable<ReturnType<TConfig[keyof TConfig]>> {
@@ -82,6 +95,13 @@ implements IResultable<TSuccess, TErrors> {
   static Succes = <T extends IResultSucess<unknown>>(v: T) => new BasicResult<T, {}>(v);
 }
 
-export class BasicResultBuilder<TSucess, TErrors> {
-  addError<T extends IResultError<string>>() {}
+export class BasicResultBuilder<TSucess = null, TErrors = {}> {
+  constructor(private success: TSucess = {}, private errors: TErrors = {}) { }
+  addError<T extends ResultError<string>>(): T["name"] extends keyof TErrors ? TypeError<"property already defined", "error with this name has already been added"> : BasicResultBuilder<T, TErrors & { [name in T["name"]]: T }> {
+    return
+  }
+
+  addResult<T extends ResultSuccess<unknown>>(): TSucess extends null ? BasicResultBuilder<T, TErrors> : TypeError<"property already defined", "resut has been added already"> {
+    return
+  }
 }

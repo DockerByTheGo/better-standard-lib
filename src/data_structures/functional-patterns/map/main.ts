@@ -14,4 +14,6 @@ export class Mapable<T> implements IMapable<T> {
   valueOf(): T {
     return this.raw;
   }
+
+  static new = <T>(v: T) => new Mapable(v)
 }

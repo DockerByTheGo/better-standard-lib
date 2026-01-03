@@ -9,45 +9,25 @@ import { ResultError } from "@better-standard-internal/data_structures/functiona
 import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
 
 import type { IValidator } from "../types/IValidator";
-import { buildError } from "@better-standard-internal/data_structures/functional-patterns/result/examples";
+import { buildError, buildErrorReturningObject, buildResult, buildSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/examples";
 import { FirstArg } from "@better-standard-internal/type-level-functions";
-
-class StringValue extends TypeMarker<"string"> {
-  constructor() {
-    super("string");
-  }
-}
-
-class Arguments extends OneOf([new StringValue(), new TypeMarker("number" as const), new TypeMarker("null" as const)] as const) {
-
-}
+import { Arguments, GetShapeFromSchema, Schema } from "../schema";
 
 
-export type Schema = {
-  [x: string]: { type: Arguments };
-};
-
-function type<T extends FirstArg<Arguments["is"]>>(v: T){
-  return v
-}
-
-export type GetShapeFromSchema<T extends Schema> = {
-  [K in keyof T]: T[K]["type"]
-};
+const succcess = buildSuccess({value: {type: Arguments.otherCons("string")}})
+const {propertyMismatch} = buildErrorReturningObject("propertyMismatch")
 
 
-const PropertyMismatch = buildError("propertyMismatch")
-
-condt 
+class validateResult extends  buildResult(succcess, {propertyMismatch}).class {} // to be used to replace the implicitely typed result of the validat function 
 
 export class BasicValidator<TSchema extends Schema> implements IValidator<GetShapeFromSchema<TSchema>> {
-  constructor(public readonly schema: TSchema) {}
+  constructor(public readonly schema: TSchema) { }
 
   validateWhichThrows(v: GetShapeFromSchema<TSchema>): GetShapeFromSchema<TSchema> {
     return this.validate(v).unpack();
   }
 
-  validate(valueToValidate: GetShapeFromSchema<TSchema>): IResultable<
+  validate(valueToValidate: GetShapeFromSchema<TSchema>): BasicResult<
     IResultSucess<GetShapeFromSchema<TSchema>>,
     { typeMismatch: IResultError<"typeMismatch"> }
   > {
@@ -70,3 +50,6 @@ export class BasicValidator<TSchema extends Schema> implements IValidator<GetSha
     return BasicResult.RawSuccess(valueToValidate);
   }
 }
+
+
+new BasicValidator({}).validate({}))
