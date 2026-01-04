@@ -1,11 +1,9 @@
 import type { Callback } from "@better-standard-internal/types/voidcallback";
 
-import type { ILeftRight } from "../../leftRight";
 import type { IMapable } from "../map";
 import type { IOptionable } from "./types";
 
 import { panic } from "../../../functions/panic";
-import { LeftRight } from "../../leftRight";
 import { Mapable } from "../map";
 
 export type none = null | undefined;
