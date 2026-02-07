@@ -1,4 +1,4 @@
-import { Mapable } from "../../../../../../src/data_structures/functional-patterns/map/main";
+import { Mapable } from "../../../src/data_structures/functional-patterns/map/main";
 
 // --- Mapable Example ---
 console.log("--- Mapable Example ---");

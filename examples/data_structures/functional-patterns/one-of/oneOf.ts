@@ -1,6 +1,6 @@
 
-import { OneOf } from "../../../../../../src/data_structures/functional-patterns/one-of/oneOf";
-import { TypeMarker } from "../../../../../../src/data_structures/others/type-marker";
+import { OneOf } from "../../../src/data_structures/functional-patterns/one-of/oneOf";
+import { TypeMarker } from "../../../src/data_structures/others/type-marker";
 
 // --- OneOf Example ---
 console.log("--- OneOf Example ---");

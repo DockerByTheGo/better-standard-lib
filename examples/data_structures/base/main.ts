@@ -1,4 +1,4 @@
-import { BaseValue } from "@better-standard-internal/data_structures";
+import { BaseValue } from "../../../../index";
 
 // --- BaseValue Example ---
 console.log("--- BaseValue Example ---");

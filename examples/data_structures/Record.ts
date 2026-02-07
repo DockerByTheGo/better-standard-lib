@@ -1,4 +1,4 @@
-import { SafeRecord } from "@better-standard-internal/data_structures/Record";
+import { SafeRecord } from "../../../index";
 
 // --- SafeRecord Example ---
 console.log("--- SafeRecord Example ---");

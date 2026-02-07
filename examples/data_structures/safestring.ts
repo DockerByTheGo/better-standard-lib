@@ -3,7 +3,7 @@
 // Note: The `SmartString` class in the source file has some implementation issues
 // and is not exported, so it cannot be demonstrated here.
 
-import { AnotherSmartString } from "@better-standard-internal/data_structures";
+import { AnotherSmartString } from "../../../index";
 
 // --- AnotherSmartString.V1 Example ---
 console.log("--- AnotherSmartString.V1 Example ---");

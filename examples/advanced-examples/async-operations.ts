@@ -1,6 +1,6 @@
-import type { Result } from "better-standard";
+import type { Result } from "../../index";
 
-import { asyncResult, Err, Ok } from "better-standard";
+import { asyncResult, Err, Ok } from "../../index";
 
 // Simulated async operations
 async function fetchUser(id: number): Promise<Result<{ id: number; name: string }, string>> {

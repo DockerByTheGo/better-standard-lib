@@ -1,4 +1,4 @@
-import { ReturnFromSubfunction } from "@better-standard-internal/data_structures";
+import { ReturnFromSubfunction } from "../../../index";
 
 // --- ReturnFromSubfunction Example ---
 console.log("--- ReturnFromSubfunction Example ---");
