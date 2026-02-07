@@ -1,1 +1,1 @@
-export * from "./panic";
+export * from "./panic/default";

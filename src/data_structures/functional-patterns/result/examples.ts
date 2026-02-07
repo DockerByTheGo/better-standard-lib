@@ -122,7 +122,7 @@ httpReqResult.class.cons.success.fromSuccess(new ResultSuccess({ body: {}, statu
 const f = httpReqResult.class.cons.errors.definite.networkError("host is unreachable");
 httpReqResult.class.cons.errors.from("networkError", "");
 
-httpReqResult.constructors.errors.networkError("l");
+// httpReqResult.constructors.errors.networkError("l");
 
 const SendHttpReq3 = () => (Math.random() > 0.5) ? new networkError("") : new httpResposeBuilder({ status: 200, body: {} });
 
@@ -130,5 +130,5 @@ new httpReqResult.class(SendHttpReq3()).try({
   ifError: {
     networkError: e => e.throw(),
   },
-  ifSuccess: res => res.data,
+  ifSuccess: res => res,
 });

@@ -3,7 +3,7 @@ import type { Callback } from "@better-standard-internal/types/voidcallback";
 import type { IMapable } from "../map";
 import type { IOptionable } from "./types";
 
-import { panic } from "../../../functions/panic";
+import { panic } from "../../../functions/panic/default";
 import { Mapable } from "../map";
 
 export type none = null | undefined;
@@ -46,9 +46,9 @@ export class Optionable<T> implements IOptionable<T> {
     return new Optionable<T>(null, true);
   }
 
-  try<TNoneReturn, TSomeReturn>( v: {
+  try<TNoneReturn, TSomeReturn>(v: {
     ifNone: () => TNoneReturn,
-    ifNotNone: (v: T) => TSomeReturn 
+    ifNotNone: (v: T) => TSomeReturn
   }) {
     return this.is_none() ? v.ifNone() : v.ifNotNone(this.value)
   }

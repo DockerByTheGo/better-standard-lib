@@ -51,5 +51,3 @@ export class BasicValidator<TSchema extends Schema> implements IValidator<GetSha
   }
 }
 
-
-new BasicValidator({}).validate({}))

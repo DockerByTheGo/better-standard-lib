@@ -1,14 +1,11 @@
 export * from "./base";
-export { Either as EitherSimple } from "./functional-patterns/either";
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/option";
 export * from "./functional-patterns/overload";
 export * from "./functional-patterns/pipe";
 export * from "./functional-patterns/result";
-export * from "./functional-patterns/unpackable";
 export * from "./group";
-export * from "./leftRight";
 export * from "./others/contextsafetype";
 export * from "./others/getSetClass";
 export * from "./others/tick";
