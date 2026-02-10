@@ -35,7 +35,6 @@ class OneOfBase<
 export function OneOf<T extends Constructor<TypeMarker<string>>[]>(
   schema: T,
 ) {
-  // Build the mapping type:
   type Instance = InstanceType<T[number]>;
   type Mapping = {
     [K in Instance["type"]]: Extract<Instance, { type: K }>
@@ -132,3 +131,10 @@ function buildOneOfFunction<K extends OneOfBase<Constructor<TypeMarker<string>>[
 const h = buildOneOfFunction(animal)
 h.FromParent(Animal.otherCons("Bird", ""))
 h.fromChild()
+
+
+
+
+export class Either<T extends (Constructor & {type: string})[]> {
+  constructor()
+}

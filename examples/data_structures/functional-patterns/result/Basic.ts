@@ -1,7 +1,7 @@
+import { ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
+import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
+import { ResultSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/success/implementations/Basic";
 
-import { BasicResult } from "../../../../../../src/data_structures/functional-patterns/result/implementations/Basic";
-import { ResultSuccess } from "../../../../../../src/data_structures/functional-patterns/result/success/implementations/Basic";
-import { ResultError } from "../../../../../../src/data_structures/functional-patterns/result/error/implementations/Basic";
 
 // --- BasicResult Example ---
 console.log("--- BasicResult Example ---");
@@ -40,7 +40,7 @@ function displayUser(id: number) {
     if (userResult.isOk()) {
         console.log(`Success for id ${id}:`, userResult.unpack());
     } else if(userResult.isError()) {
-        const error = userResult.value; // value is the error object
+        const error = userResult; // value is the error object
         console.log(`Error for id ${id}: ${error.name} - ${error.message}`);
     }
 

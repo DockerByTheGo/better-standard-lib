@@ -1,7 +1,7 @@
 
-import { BasicResult } from "../../../../../../../src/data_structures/functional-patterns/result/implementations/Basic";
-import { ResultSuccess } from "../../../../../../../src/data_structures/functional-patterns/result/success/implementations/Basic";
-import { ResultError } from "../../../../../../../src/data_structures/functional-patterns/result/error/implementations/Basic";
+import { ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
+import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
+import { ResultSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/success/implementations/Basic";
 import { expect, test } from "bun:test";
 
 // --- Test Setup ---
