@@ -1,3 +1,5 @@
+import { LOG } from "./log";
+
 function prettifyJson(json: string): string {
   let level = 0;
   let result = "";
@@ -42,5 +44,5 @@ function prettifyJson(json: string): string {
 }
 
 export function logWithoutMethods(h: object) {
-  console.log(prettifyJson(JSON.stringify(h)));
+  LOG(prettifyJson(JSON.stringify(h)));
 }

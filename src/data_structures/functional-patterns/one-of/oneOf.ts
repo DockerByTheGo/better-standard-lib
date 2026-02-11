@@ -2,6 +2,7 @@ import type { KeyOfOnlyStringKeys } from "@better-standard-internal/type-level-f
 
 import { TypeMarker } from "@better-standard-internal/data_structures/others/type-marker";
 import { Constructor } from "@better-standard-internal/others/addStaticConstrucots/main";
+import { LOG } from "@better-standard-internal/functions";
 
 
 class OneOfBase<
@@ -63,12 +64,12 @@ export function OneOf<T extends Constructor<TypeMarker<string>>[]>(
 
 class Fish<T extends number> extends TypeMarker<"Fish"> {
   constructor(public o: T) { super("Fish"); }
-  public swim = () => console.log("swim");
+  public swim = () => LOG("swim");
 }
 
 class Bird<T extends string> extends TypeMarker<"Bird"> {
   constructor(public k: T) { super("Bird"); }
-  public fly = () => console.log("fly");
+  public fly = () => LOG("fly");
 }
 
 class animal extends OneOf([Fish, Bird])<unknown> {

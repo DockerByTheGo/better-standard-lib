@@ -5,3 +5,4 @@ export * from "./mapObject";
 export * from "./objectEntries";
 export * from "./panic";
 export * from "./catch"
+export * from "./log"

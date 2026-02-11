@@ -13,9 +13,6 @@ export function catchF<
 function h() {
     throw new Error("idk")
 }
-
-catchF(h, console.log)
-
 export function composeCatch<
     TArg,
     T extends (arg: TArg) => unknown,
@@ -26,10 +23,3 @@ export function composeCatch<
 ): (arg: TArg) => ReturnType<T> | ReturnType<TErrorhandler> {
     return arg => catchF(() => v(arg), handler)
 }
-
-const g = composeCatch(
-    h,
-    console.log
-)
-
-g()

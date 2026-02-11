@@ -35,7 +35,6 @@ async function main() {
   // Using asyncResult for better error handling
   const result = await asyncResult(() => fetchUser(userId))
     .andThen(async (user) => {
-      console.log("User:", user);
       return fetchUserDetails(user.id);
     })
     .map(details => ({
@@ -46,7 +45,6 @@ async function main() {
 
   // Handle the result
   if (result.isOk()) {
-    console.log("Success:", result.unwrap());
   }
   else {
     console.error("Error:", result.unwrapErr());
