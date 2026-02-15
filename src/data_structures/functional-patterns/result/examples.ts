@@ -33,7 +33,7 @@ namespace p {
 }
 // -----
 const networkError = buildError("networkError");
-
+const corsError = buildError("corsError")
 const httpResposeBuilder = buildSuccess({ status: { type: Arguments.otherCons("string") }, body: { type: Arguments.otherCons("string") } });
 new httpResposeBuilder({status: 4, body: 3})
 
@@ -84,7 +84,9 @@ export function buildResult<
 
 
 
-const httpReqResult = buildResult(httpResposeBuilder, { networkError });
+const httpReqResult = buildResult(httpResposeBuilder, { networkError, corsError });
+
+class httpReqResultClass extends httpReqResult.class {}
 
 httpReqResult.class.cons.success.fromSuccess(new ResultSuccess({ body: {}, status: 3 })).try({
   ifSuccess: arg => arg.data,
@@ -98,11 +100,8 @@ httpReqResult.class.cons.errors.from("networkError", "");
 
 // httpReqResult.constructors.errors.networkError("l");
 
-const SendHttpReq3 = () => (Math.random() > 0.5) ? new networkError("") : new httpResposeBuilder({ status: 200, body: {} });
+function SendHttpReq3 (): httpReqResultClass  {
+  return  (Math.random() > 0.5) ? httpReqResult.class.cons.errors.from("corsError", "d") : httpReqResult.class.cons.success.raw({ status: 200, body: 4 }) }
 
-new httpReqResult.class(SendHttpReq3()).try({
-  ifError: {
-    networkError: e => e.throw(),
-  },
-  ifSuccess: res => res,
-});
+
+  SendHttpReq3()
