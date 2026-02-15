@@ -5,13 +5,13 @@ import type { IResultable } from "@better-standard-internal/data_structures/func
 import { TypeMarker } from "@better-standard-internal/data_structures";
 import { OneOf } from "@better-standard-internal/data_structures/functional-patterns/one-of";
 import { ifNotNone } from "@better-standard-internal/data_structures/functional-patterns/option";
-import { ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
-import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
+import { buildErrorReturningObject, ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
+import { BasicResult, buildResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
 
 import type { IValidator } from "../types/IValidator";
-import { buildError, buildErrorReturningObject, buildResult, buildSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/examples";
 import { FirstArg } from "@better-standard-internal/type-level-functions";
 import { Arguments, GetShapeFromSchema, Schema } from "../schema";
+import { buildSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/success/implementations/Basic";
 
 
 const succcess = buildSuccess({value: {type: Arguments.otherCons("string")}})

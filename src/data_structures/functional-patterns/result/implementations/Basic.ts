@@ -121,3 +121,50 @@ export function mapResult<TFunc extends (...arg: any) => IResultError<any> | IRe
   > {
   return (args) => BasicResult.fromUnion(v(args))
 }
+
+
+export function buildResult<
+  TSuccessData,
+  TErrorNames extends string,
+>(
+  successClass: new (data: TSuccessData) => ResultSuccess<TSuccessData>,
+  errorClasses: Record<TErrorNames, new (msg: string) => ResultError<TErrorNames>>,
+) {
+  const errorConstructors: { [ErrorName in keyof typeof errorClasses]: (msg: string) => InstanceType<typeof errorClasses[ErrorName]> } = {};
+
+  const constructors = {
+    errors: { ...errorConstructors },
+  };
+
+  return {
+    class: class CustomResult extends BasicResult<ResultSuccess<TSuccessData>, Record<TErrorNames, ResultError<TErrorNames>>> {
+      constructor(val: Or<[ResultSuccess<TSuccessData>, ResultError<TErrorNames>]>) {
+        super(val);
+      }
+
+      static cons = {
+        success: {
+          fromSuccess: (v: ResultSuccess<TSuccessData>) => new CustomResult(v),
+          raw: (v: TSuccessData) => new CustomResult(new successClass(v)),
+        },
+        errors: {
+          from(v: TErrorNames, msg: string) {
+            return new CustomResult(new errorClasses[v](msg));
+          },
+          definite: {
+            ...Object
+              .entries(errorClasses)
+              .reduce((prev, [errorName, ErrorClass]) => {
+                prev[errorName as TErrorNames] = (msg: string) => new ErrorClass(msg);
+                return prev;
+              }, {} as { [K in TErrorNames]: (msg: string) => ResultError<TErrorNames> }),
+          },
+        },
+        new: (v: ResultSuccess<TSuccessData> | ResultError<TErrorNames>) => new CustomResult(v),
+      };
+    },
+    constructors,
+  };
+}
+
+
