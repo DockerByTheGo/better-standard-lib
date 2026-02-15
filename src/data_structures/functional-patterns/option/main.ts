@@ -31,11 +31,8 @@ export const statics = {
 
 export class Optionable<T> implements IOptionable<T> {
   private readonly value: T | null;
-  private readonly isNoneValue: boolean;
-
-  private constructor(value: T | null, isNone: boolean) {
+  private constructor(value: T | null) {
     this.value = value;
-    this.isNoneValue = isNone;
   }
 
   static some<T>(v: T): Optionable<T> {
@@ -54,11 +51,11 @@ export class Optionable<T> implements IOptionable<T> {
   }
 
   is_none(): boolean {
-    return this.isNoneValue;
+    return this.value === undefined || this.value === null;
   }
 
   isSome(): boolean {
-    return !this.isNoneValue;
+    return !this.is_none();
   }
 
   ifNone(v: () => void): void {

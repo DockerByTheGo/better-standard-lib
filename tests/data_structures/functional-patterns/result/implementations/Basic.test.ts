@@ -25,6 +25,9 @@ function fetchUser(id: number): BasicResult<UserSuccess, {
 }
 
 
+// implict 
+
+
 // --- Tests ---
 
 test("BasicResult should correctly identify and unpack a success result", () => {
