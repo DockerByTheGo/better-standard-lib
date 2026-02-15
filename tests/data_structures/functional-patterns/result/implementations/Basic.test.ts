@@ -1,31 +1,45 @@
 
 import { ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
-import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
+import { BasicResult, mapResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
 import { ResultSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/success/implementations/Basic";
 import { expect, test } from "bun:test";
 
 // --- Test Setup ---
 
-type NotFoundError = ResultError<"NotFoundError">;
-type UnauthorizedError = ResultError<"UnauthorizedError">;
-type User = { name: string; age: number };
-type UserSuccess = ResultSuccess<User>;
 
-function fetchUser(id: number): BasicResult<UserSuccess, {
-    NotFoundError: NotFoundError,
-    UnauthorizedError: UnauthorizedError,
-}> {
+// # implict usage, e.g. we leave it to the ts compiler to infer the correct types 
+// ## implicit usage with manual binding 
+// in this method we just return the raw states of the result and then in the callee manually transform it 
+
+function fetchUser(id: number) {
     if (id === 1) {
-        return BasicResult.Succes(new ResultSuccess({ name: "John Doe", age: 30 }));
+        return (new ResultSuccess({ name: "John Doe", age: 30 }));
     } else if (id === 2) {
-        return BasicResult.Error(new ResultError("UnauthorizedError", "You are not authorized to access this user."));
+        return (new ResultError("UnauthorizedError", "You are not authorized to access this user."));
     } else {
-        return BasicResult.Error(new ResultError("NotFoundError", `User with id ${id} not found.`));
+        return (new ResultError("NotFoundError", `User with id ${id} not found.`));
     }
 }
 
+BasicResult.fromUnion(fetchUser(4))
 
-// implict 
+
+// ## implicit usage with automatic binding 
+// here we will use a helper function which will allows us to create a function which returns a result object 
+
+export const getFileContent = mapResult((filename: string) => {
+    if (filename.length < 1){
+        return new ResultError("Invalid file name", "name is not good")
+    }else {
+        return new ResultSuccess("content")
+    }
+})
+
+getFileContent().ifError({
+    "Invalid file name": v => v.name
+})
+
+// # explicit usage
 
 
 // --- Tests ---

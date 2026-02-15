@@ -105,3 +105,11 @@ export class BasicResultBuilder<TSucess = null, TErrors = {}> {
     return
   }
 }
+
+
+export function mapResult<TFunc extends (...arg: any) => IResultError<any> | IResultSucess<any>, TReturn = ReturnType<TFunc>>(v: TFunc): () => BasicResult<
+    TReturn extends ResultSuccess<infer U> ? ResultSuccess<U> : never,
+    UnionToIntersection<TReturn extends ResultError<infer N> ? Record<N, ResultError<N>> : {}>
+  > {
+  return (args) => BasicResult.fromUnion(v(args))
+}
