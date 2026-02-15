@@ -2,22 +2,21 @@ import type { Or } from "@better-standard-internal/types";
 
 import type { IResultable } from "./types/IResult";
 
-import { ResultError } from "./error";
+import { buildError, ResultError } from "./error";
 import { BasicResult } from "./implementations/Basic";
-import { ResultSuccess } from "./success/implementations/Basic";
+import { buildSuccess, ResultSuccess } from "./success/implementations/Basic";
 import { GetShapeFromSchema } from "@better-standard-internal/others/validator/schema/utils";
 import { Schema } from "@better-standard-internal/others/validator/schema/types";
 import { Arguments } from "@better-standard-internal/others/validator/schema";
 
 // remodel to use OneOf
 
-const noInternetError = new ResultError("NoInternetError", "No internet connection available");
 
 // explicit signatures
 namespace p {
   const networkError = new ResultError("NetworkError", "Failed to connect to server"); // idk it would be a problem to make it sso that all instances are the same?
   function SendHttpRequest(): IResultable<
-    { status: number; body: string },
+    { ok: true, data: { status: number; body: string } },
     {
       networkError: typeof networkError;
     }
@@ -33,35 +32,10 @@ namespace p {
   });
 }
 // -----
-export function buildError<TName extends string>(name: TName) {
-  return class CustomError extends ResultError<TName> {
-    constructor(message: string) {
-      super(name, message);
-    }
-  };
-}
-
-export function buildErrorReturningObject<TName extends string>(name: TName): { [K in TName]: new (message: string) => ResultError<TName> } {
-  return {
-    [name]: class CustomError extends ResultError<TName> {
-      constructor(message: string) {
-        super(name, message);
-      }
-    }
-  } as { [K in TName]: new (message: string) => ResultError<TName> };
-}
-
 const networkError = buildError("networkError");
 
-export function buildSuccess<TSuccess extends Schema>(schema: TSuccess) {
-  return class CustomSuccess extends ResultSuccess<GetShapeFromSchema<TSuccess>> {
-    constructor(val: GetShapeFromSchema<TSuccess>) {
-      super(val);
-    }
-  };
-}
-
 const httpResposeBuilder = buildSuccess({ status: { type: Arguments.otherCons("string") }, body: { type: Arguments.otherCons("string") } });
+new httpResposeBuilder({status: 4, body: 3})
 
 export function buildResult<
   TSuccessData,

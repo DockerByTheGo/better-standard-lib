@@ -4,5 +4,5 @@ export * from "./map";
 export * from "./mapObject";
 export * from "./objectEntries";
 export * from "./panic";
-export * from "./catch"
+export * from "./error-handlng"
 export * from "./log"

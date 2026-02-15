@@ -35,6 +35,14 @@ export class BasicResult<
     return this.value.data;
   }
 
+  static fromThrow<V extends () => any>(v: V) {
+    try{
+      return BasicResult.RawSuccess( v())
+    }catch(e) {
+      return BasicResult.RawError("", e.message)
+    }
+  }
+
   static fromUnion<T>(b: T): BasicResult<
     T extends ResultSuccess<infer U> ? ResultSuccess<U> : never,
     UnionToIntersection<T extends ResultError<infer N> ? Record<N, ResultError<N>> : {}>
@@ -88,7 +96,7 @@ export class BasicResult<
   static RawSuccess = <TSchema>(v: TSchema) => new BasicResult(ResultSuccess.new(v));
 
   // same ass success but for error
-  static RawError = <TName extends string>(name: TName, msg: string) => new ResultError(name, msg);
+  static RawError = <TName extends string>(name: TName, msg: string) => new BasicResult(new ResultError(name, msg));
 
   static Error = <T extends ResultError<string>>(v: T) => new BasicResult<{}, { [x in T["TGetName"]]: T }>(v);
 
