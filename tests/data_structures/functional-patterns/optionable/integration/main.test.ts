@@ -39,6 +39,6 @@ describe("optionable and BasicResult integration", () => {
     });
 
     expect(option).toBeInstanceOf(Optionable);
-    expect(option.is_none()).toBe(true);
+    expect(option.isNone()).toBe(true);
   });
 });

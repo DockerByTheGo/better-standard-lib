@@ -76,26 +76,26 @@ describe("Boolean", () => {
   it("IfTrue returns Optionable with value for true", () => {
     const bool = new Boolean(true as const);
     const result = bool.IfTrue(() => 42);
-    expect(result.is_none()).toBe(false);
+    expect(result.isNone()).toBe(false);
     expect(result.unpackRaw()).toBe(42);
   });
 
   it("IfTrue returns none for false", () => {
     const bool = new Boolean(false as const);
     const result = bool.IfTrue(() => 42);
-    expect(result.is_none()).toBe(true);
+    expect(result.isNone()).toBe(true);
   });
 
   it("IfFalse returns none for true", () => {
     const bool = new Boolean(true as const);
     const result = bool.IfFalse(() => 42);
-    expect(result.is_none()).toBe(true);
+    expect(result.isNone()).toBe(true);
   });
 
   it("IfFalse returns Optionable with value for false", () => {
     const bool = new Boolean(false as const);
     const result = bool.IfFalse(() => 42);
-    expect(result.is_none()).toBe(false);
+    expect(result.isNone()).toBe(false);
     expect(result.unpackRaw()).toBe(42);
   });
 });

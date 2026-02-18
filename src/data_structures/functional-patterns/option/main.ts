@@ -5,6 +5,7 @@ import type { IOptionable } from "./types";
 
 import { panic } from "../../../functions/panic/default";
 import { Mapable } from "../map";
+import { map } from "@better-standard-internal/functions";
 
 export type none = null | undefined;
 
@@ -46,48 +47,48 @@ export class Optionable<T> implements IOptionable<T> {
   try<TNoneReturn, TSomeReturn>(v: {
     ifNone: () => TNoneReturn,
     ifNotNone: (v: T) => TSomeReturn
-  }) {
-    return this.is_none() ? v.ifNone() : v.ifNotNone(this.value)
+  }): Mapable<TNoneReturn | TSomeReturn> {
+    return map(this.isNone() ? v.ifNone() : v.ifNotNone(this.value), v => new Mapable(v))
   }
 
-  is_none(): boolean {
+  isNone(): boolean {
     return this.value === undefined || this.value === null;
   }
 
   isSome(): boolean {
-    return !this.is_none();
+    return !this.isNone();
   }
 
   ifNone(v: () => void): void {
-    if (this.is_none()) {
+    if (this.isNone()) {
       v();
     }
   }
 
   unpack(errMsg?: string): Mapable<T> {
-    if (this.is_none()) {
+    if (this.isNone()) {
       panic(errMsg ?? statics.messageForWhenOptionIsNone);
     }
     return new Mapable(this.value as T);
   }
 
   unpack_or(default_handler: () => T): T {
-    return this.is_none() ? default_handler() : this.value as T;
+    return this.isNone() ? default_handler() : this.value as T;
   }
 
   unpack_with_default(d: T): T {
-    return this.is_none() ? d : this.value as T;
+    return this.isNone() ? d : this.value as T;
   }
 
   unpack_or_with_diverging_type_from_the_original<C>(d: () => C): ILeftRight<T, C> {
-    if (this.is_none()) {
+    if (this.isNone()) {
       return new LeftRight(null as T, d());
     }
     return new LeftRight(this.value as T, null as C);
   }
 
   expect(msg: string): IMapable<T> {
-    if (this.is_none()) {
+    if (this.isNone()) {
       panic(msg);
     }
     return new Mapable(this.value as T);
@@ -100,11 +101,11 @@ export class Optionable<T> implements IOptionable<T> {
   }
 
   map<U>(fn: (v: T) => U): Optionable<U> {
-    return this.is_none() ? Optionable.none() : Optionable.some(fn(this.value as T));
+    return this.isNone() ? Optionable.none() : Optionable.some(fn(this.value as T));
   }
 
   flatMap<U>(fn: (v: T) => Optionable<U>): Optionable<U> {
-    return this.is_none() ? Optionable.none() : fn(this.value as T);
+    return this.isNone() ? Optionable.none() : fn(this.value as T);
   }
 }
 

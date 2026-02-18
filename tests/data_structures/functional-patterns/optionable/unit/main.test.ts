@@ -7,19 +7,19 @@ describe("optionable", () => {
     it("should create a Some value", () => {
       const some = Optionable.some(5);
       expect(some.isSome()).toBe(true);
-      expect(some.is_none()).toBe(false);
+      expect(some.isNone()).toBe(false);
     });
 
     it("should create a None value", () => {
       const none = Optionable.none();
       expect(none.isSome()).toBe(false);
-      expect(none.is_none()).toBe(true);
+      expect(none.isNone()).toBe(true);
     });
 
     it("should create a Some value with null", () => {
       const someNull = Optionable.some(null);
       expect(someNull.isSome()).toBe(true);
-      expect(someNull.is_none()).toBe(false);
+      expect(someNull.isNone()).toBe(false);
     });
   });
 
@@ -108,7 +108,7 @@ describe("optionable", () => {
     it("should return None when mapping a None value", () => {
       const none = Optionable.none<number>();
       const mapped = none.map(x => x * 2);
-      expect(mapped.is_none()).toBe(true);
+      expect(mapped.isNone()).toBe(true);
     });
   });
 
@@ -123,13 +123,13 @@ describe("optionable", () => {
     it("should apply the function to a Some value and return a None", () => {
       const some = Optionable.some(5);
       const mapped = some.flatMap(_ => Optionable.none<number>());
-      expect(mapped.is_none()).toBe(true);
+      expect(mapped.isNone()).toBe(true);
     });
 
     it("should return None when flatMapping a None value", () => {
       const none = Optionable.none<number>();
       const mapped = none.flatMap(x => Optionable.some(x * 2));
-      expect(mapped.is_none()).toBe(true);
+      expect(mapped.isNone()).toBe(true);
     });
   });
 

@@ -1,19 +1,18 @@
-import type * as Pipeable from "@better-standard-internal/data_structures/pipe/export";
+import { Mapable as MapableClass } from "../functional-patterns/map/main";
 
-export class BaseValue<V> implements Pipeable.types.IPipeable<V> {
-  constructor(private v: V) {}
-  map<F>(func: (v: V) => F): BaseValue<F> {
-    return new BaseValue(func(this.v));
+export class BaseValue<V> extends MapableClass<V> {
+  constructor(v: V) {
+    super(v);
   }
 
-  tap(func: (v: V) => void): BaseValue<V> {
-    func(this.v);
+  tap(func: (v: V) => void): this {
+    func(this.valueOf());
     return this;
   }
 
   getRaw(): V {
-    return this.v;
+    return this.valueOf();
   }
 }
 
-new BaseValue(1).map(v => (v + 1).toLocaleString()).tap((v) => { console.log(v); return v; }).getRaw();
+
