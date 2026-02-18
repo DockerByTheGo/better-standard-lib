@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { catchF, composeCatch } from "../src/functions/catch";
+import { catchF, composeCatch } from "../src/functions/error-handlng";
 
 describe("catchF", () => {
     it("should return the result when no error is thrown", () => {

@@ -5,3 +5,5 @@ export type * from "./string";
 export type * from "./tuple";
 export type * from "./union";
 export type * from "./error"
+export type * from "./and"
+export type * from "./if"

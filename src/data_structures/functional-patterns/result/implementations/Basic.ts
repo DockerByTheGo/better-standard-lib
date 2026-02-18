@@ -35,6 +35,14 @@ export class BasicResult<
     return this.value.data;
   }
 
+  static fromThrow<V extends () => any>(v: V) {
+    try{
+      return BasicResult.RawSuccess( v())
+    }catch(e) {
+      return BasicResult.RawError("", e.message)
+    }
+  }
+
   static fromUnion<T>(b: T): BasicResult<
     T extends ResultSuccess<infer U> ? ResultSuccess<U> : never,
     UnionToIntersection<T extends ResultError<infer N> ? Record<N, ResultError<N>> : {}>
@@ -88,7 +96,7 @@ export class BasicResult<
   static RawSuccess = <TSchema>(v: TSchema) => new BasicResult(ResultSuccess.new(v));
 
   // same ass success but for error
-  static RawError = <TName extends string>(name: TName, msg: string) => new ResultError(name, msg);
+  static RawError = <TName extends string>(name: TName, msg: string) => new BasicResult(new ResultError(name, msg));
 
   static Error = <T extends ResultError<string>>(v: T) => new BasicResult<{}, { [x in T["TGetName"]]: T }>(v);
 
@@ -113,3 +121,50 @@ export function mapResult<TFunc extends (...arg: any) => IResultError<any> | IRe
   > {
   return (args) => BasicResult.fromUnion(v(args))
 }
+
+
+export function buildResult<
+  TSuccessData,
+  TErrorNames extends string,
+>(
+  successClass: new (data: TSuccessData) => ResultSuccess<TSuccessData>,
+  errorClasses: Record<TErrorNames, new (msg: string) => ResultError<TErrorNames>>,
+) {
+  const errorConstructors: { [ErrorName in keyof typeof errorClasses]: (msg: string) => InstanceType<typeof errorClasses[ErrorName]> } = {};
+
+  const constructors = {
+    errors: { ...errorConstructors },
+  };
+
+  return {
+    class: class CustomResult extends BasicResult<ResultSuccess<TSuccessData>, Record<TErrorNames, ResultError<TErrorNames>>> {
+      constructor(val: Or<[ResultSuccess<TSuccessData>, ResultError<TErrorNames>]>) {
+        super(val);
+      }
+
+      static cons = {
+        success: {
+          fromSuccess: (v: ResultSuccess<TSuccessData>) => new CustomResult(v),
+          raw: (v: TSuccessData) => new CustomResult(new successClass(v)),
+        },
+        errors: {
+          from(v: TErrorNames, msg: string) {
+            return new CustomResult(new errorClasses[v](msg));
+          },
+          definite: {
+            ...Object
+              .entries(errorClasses)
+              .reduce((prev, [errorName, ErrorClass]) => {
+                prev[errorName as TErrorNames] = (msg: string) => new ErrorClass(msg);
+                return prev;
+              }, {} as { [K in TErrorNames]: (msg: string) => ResultError<TErrorNames> }),
+          },
+        },
+        new: (v: ResultSuccess<TSuccessData> | ResultError<TErrorNames>) => new CustomResult(v),
+      };
+    },
+    constructors,
+  };
+}
+
+
