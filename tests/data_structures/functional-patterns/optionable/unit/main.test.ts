@@ -133,21 +133,4 @@ describe("optionable", () => {
     });
   });
 
-  describe("unpack_or_with_diverging_type_from_the_original", () => {
-    it("should return a Left with the value for a Some", async () => {
-      const some = Optionable.some(5);
-      const result = some.unpack_or_with_diverging_type_from_the_original(() => "error");
-      const raw = await result.getRaw();
-      expect(raw[0]).toBe(5);
-      expect(raw[1]).toBe(null);
-    });
-
-    it("should return a Right with the default value for a None", async () => {
-      const none = Optionable.none<number>();
-      const result = none.unpack_or_with_diverging_type_from_the_original(() => "error");
-      const raw = await result.getRaw();
-      expect(raw[0]).toBe(null);
-      expect(raw[1]).toBe("error");
-    });
-  });
 });

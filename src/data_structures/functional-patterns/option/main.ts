@@ -80,13 +80,6 @@ export class Optionable<T> implements IOptionable<T> {
     return this.isNone() ? d : this.value as T;
   }
 
-  unpack_or_with_diverging_type_from_the_original<C>(d: () => C): ILeftRight<T, C> {
-    if (this.isNone()) {
-      return new LeftRight(null as T, d());
-    }
-    return new LeftRight(this.value as T, null as C);
-  }
-
   expect(msg: string): IMapable<T> {
     if (this.isNone()) {
       panic(msg);

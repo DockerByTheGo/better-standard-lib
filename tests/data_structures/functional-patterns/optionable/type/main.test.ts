@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-import type { ILeftRight } from "../../../../../src/data_structures/leftRight";
-
 import { Optionable } from "../../../../../src/data_structures/functional-patterns/option/main";
 
 describe("optionable types", () => {
@@ -37,11 +35,6 @@ describe("optionable types", () => {
     const unpackedOrNumber: number = unpackedOr;
     // @ts-expect-error: Should not be assignable to another type
     const wrongUnpackedOr: string = unpackedOr;
-
-    // unpack_or_with_diverging_type_from_the_original
-    const diverged: ILeftRight<number, string> = someNumber.unpack_or_with_diverging_type_from_the_original(() => "error");
-    // @ts-expect-error
-    const wrongDiverged: ILeftRight<string, number> = someNumber.unpack_or_with_diverging_type_from_the_original(() => "error");
 
     expect(true).toBe(true); // This test is for type checking, so it just needs to compile
   });
