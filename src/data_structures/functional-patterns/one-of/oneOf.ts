@@ -136,6 +136,6 @@ h.fromChild()
 
 
 
-export class Either<T extends (Constructor & {type: string})[]> {
-  constructor()
-}
+// export class Either<T extends (Constructor & {type: string})[]> {
+//   constructor()
+// }

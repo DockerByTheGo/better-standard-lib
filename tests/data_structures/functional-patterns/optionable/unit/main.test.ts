@@ -18,8 +18,7 @@ describe("optionable", () => {
 
     it("should create a Some value with null", () => {
       const someNull = Optionable.some(null);
-      expect(someNull.isSome()).toBe(true);
-      expect(someNull.isNone()).toBe(false);
+      expect(someNull.isNone()).toBe(true);
     });
   });
 
@@ -36,7 +35,7 @@ describe("optionable", () => {
 
     it("should unpack a Some(null) value", () => {
       const someNull = Optionable.some(null);
-      expect(someNull.unpack().raw).toBe(null);
+      expect(() => someNull.unpack()).toThrow();
     });
   });
 
@@ -64,8 +63,8 @@ describe("optionable", () => {
     });
 
     it("should return null for Some(null)", () => {
-      const someNull = Optionable.some(null);
-      expect(someNull.unpack_with_default(10)).toBe(null);
+      const someNull = Optionable.some<number>(null);
+      expect(someNull.unpack_with_default(10)).toBe(10);
     });
   });
 

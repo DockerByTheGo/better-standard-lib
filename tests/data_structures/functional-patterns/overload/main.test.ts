@@ -1,6 +1,6 @@
-import { FunctionOverload, OverloadBuilderWithCustomResolver } from "../../../../../../src/data_structures/functional-patterns/overload/main";
 import { z } from "zod";
 import { expect, test } from "bun:test";
+import { FunctionOverload } from "@better-standard-internal/data_structures";
 
 // --- FunctionOverload Tests ---
 

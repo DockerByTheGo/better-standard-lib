@@ -2,7 +2,6 @@ import type z from "zod";
 
 import type { ifTrue } from "@better-standard-internal/type-level-functions/boolean/isBoolean";
 
-import type { ISimpleMapable } from "../mapable";
 import type { OverloadsBase, OverloadsImplBase, ZodRawObject } from "./types";
 
 import { Try } from "../option/main";

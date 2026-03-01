@@ -36,7 +36,7 @@ export class Optionable<T> implements IOptionable<T> {
     this.value = value;
   }
 
-  static some<T>(v: T): Optionable<T> {
+  static some<T>(v: T | none): Optionable<T> {
     return new Optionable(v, false);
   }
 
