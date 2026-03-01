@@ -1,5 +1,5 @@
 
-import { Mapable } from "../../../../../../src/data_structures/functional-patterns/map/main";
+import { Mapable } from "@better-standard-internal/data_structures";
 import { expect, test } from "bun:test";
 
 test("Mapable should hold a value and return it with raw", () => {

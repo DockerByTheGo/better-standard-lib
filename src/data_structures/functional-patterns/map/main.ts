@@ -4,7 +4,8 @@ export class Mapable<T> implements IMapable<T> {
   constructor(private v: T) {}
 
   map<V>(func: (v: T) => V): IMapable<V> {
-    return new Mapable(func(this.v));
+    this.v = func(this.v);
+    return this
   }
 
   get raw(): T {

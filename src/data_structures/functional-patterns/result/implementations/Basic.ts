@@ -20,7 +20,7 @@ export class BasicResult<
 
   implements IResultable<TSuccess, TErrors> {
   constructor(
-    private value: Or<[
+    public readonly value: Or<[
       TSuccess,
       TErrors[keyof TErrors],
     ]>,
@@ -47,11 +47,7 @@ export class BasicResult<
     T extends ResultSuccess<infer U> ? ResultSuccess<U> : never,
     UnionToIntersection<T extends ResultError<infer N> ? Record<N, ResultError<N>> : {}>
   > {
-    if ((b as any).ok) {
-      return new BasicResult(b as any);
-    } else {
-      return new BasicResult(b as any);
-    }
+    return new BasicResult(b)
   }
 
   try<
@@ -85,7 +81,7 @@ export class BasicResult<
   }
 
   isOk(): this is TSuccess {
-    return "ok" in this.value;
+    return "ok" in this.value && this.value.ok === true;
   }
 
   isError(): this is TErrors[keyof TErrors] {
@@ -95,7 +91,7 @@ export class BasicResult<
   // you just provide the schema no need to provide a ResultResponse object
   static RawSuccess = <TSchema>(v: TSchema) => new BasicResult(ResultSuccess.new(v));
 
-  // same ass success but for error
+  // creates an error result , e.g. an error wrapped in a result object, this is useful for when you want to create an error result without having to define a new error class
   static RawError = <TName extends string>(name: TName, msg: string) => new BasicResult(new ResultError(name, msg));
 
   static Error = <T extends ResultError<string>>(v: T) => new BasicResult<{}, { [x in T["TGetName"]]: T }>(v);
@@ -115,7 +111,9 @@ export class BasicResultBuilder<TSucess = null, TErrors = {}> {
 }
 
 
-export function mapResult<TFunc extends (...arg: any) => IResultError<any> | IResultSucess<any>, TReturn = ReturnType<TFunc>>(v: TFunc): () => BasicResult<
+export function mapResult<
+TFunc extends (...arg: any) => IResultError<any> | IResultSucess<any>,
+TReturn = ReturnType<TFunc>>(v: TFunc): (v: Parameters<TFunc>[0]) => BasicResult<
     TReturn extends ResultSuccess<infer U> ? ResultSuccess<U> : never,
     UnionToIntersection<TReturn extends ResultError<infer N> ? Record<N, ResultError<N>> : {}>
   > {

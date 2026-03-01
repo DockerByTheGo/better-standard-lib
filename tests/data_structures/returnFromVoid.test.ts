@@ -1,4 +1,4 @@
-import { ReturnFromSubfunction } from "../../src/data_structures/returnFromVoid";
+import { ReturnFromSubfunction } from "../../src/functions/returnFromVoid";
 import { expect, test } from "bun:test";
 
 test("ReturnFromSubfunction should return the value returned by the callback", () => {

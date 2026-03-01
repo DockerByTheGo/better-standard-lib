@@ -1,4 +1,4 @@
-import { LOG } from "./log";
+import { LOG } from "./logging/log";
 
 function prettifyJson(json: string): string {
   let level = 0;
