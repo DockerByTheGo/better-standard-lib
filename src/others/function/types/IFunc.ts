@@ -1,9 +1,7 @@
-import { Schema } from "@better-standard-internal/others/validator";
-import type { URecord } from "@better-standard-internal/type-level-functions";
-
+import {z} from "zod/v4";
 export type IFunc<
   TName extends string,
-  TArgs extends Schema,
+  TArgs extends z.ZodObject,
   TReturnType,
   TFunction = (args: TArgs) => TReturnType,
 > = {

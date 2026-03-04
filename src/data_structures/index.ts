@@ -9,7 +9,4 @@ export * from "./others/contextsafetype";
 export * from "./others/getSetClass";
 export * from "./others/tick";
 export * from "./others/type-marker";
-export * from "./Record";
 export * from "../functions/returnFromVoid";
-export * from "./safestring";
-export * from "./wrappers-around-primitives/array";
