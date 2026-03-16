@@ -1,4 +1,3 @@
-export * from "./base";
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/option";

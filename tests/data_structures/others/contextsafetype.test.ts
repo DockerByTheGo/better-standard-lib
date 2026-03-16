@@ -1,5 +1,5 @@
 
-import { TypeSafeClassBase } from "../../../../src/data_structures/others/contextsafetype";
+import { TypeSafeClassBase } from "@better-standard-internal/data_structures";
 import { expect, test } from "bun:test";
 
 test("TypeSafeClassBase should hold and return a string value", () => {

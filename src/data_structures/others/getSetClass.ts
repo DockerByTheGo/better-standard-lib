@@ -6,7 +6,7 @@ import { ifNotNone } from "../functional-patterns/option";
 
 export class GetSet<V> implements IMapable<V> {
   private v: V;
-
+  public raw: V = this.v;
   private onSet: VCallback<V> = (v: V) => {};
   private onGet: VCallback<V> = (v: V) => {};
   public get(): V {
@@ -19,12 +19,7 @@ export class GetSet<V> implements IMapable<V> {
     ifNotNone(onSet, onSet => (this.onSet = onSet));
   }
 
-  // public map(func: (v: V) => V): V  {
-  //     this.onGet.v(this.v)
-  //     return new Mapable(this.v);
-  // }
-
-  simpleMap(func: (v: V) => V): V {
+  simpleMap<TReturn>(func: (v: V) => TReturn):  TReturn{
     return func(this.v);
   };
 
