@@ -1,6 +1,6 @@
+import { OneOf } from "@better-standard-internal/data_structures/functional-patterns/one-of";
 import { describe, expect, it, vi } from "vitest";
 
-import { OneOf } from "../src/data_structures/oneOf";
 
 // Test the OneOf implementation
 describe("oneOf", () => {

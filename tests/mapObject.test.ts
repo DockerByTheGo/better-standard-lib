@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { map } from "../src/functions/map";
-import { entries } from "../src/functions/mapObject";
+import { entries } from "@better-standard-internal/functions";
 
 describe("mapObject and map", () => {
   it("entries returns typed entries", () => {
