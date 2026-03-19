@@ -1,3 +1,3 @@
-export function objectEntries<T extends Record<string, unknown>>(obj: T): Array<[keyof T, T[keyof T]]> {
-  return Object.keys(obj).map(key => [key, obj[key]] as [keyof T, T[keyof T]]);
+export function entries<T extends Record<string, unknown>>(v: T): [keyof T, T[keyof T]][] {
+  return Object.entries(v) as [keyof T, T[keyof T]][];
 }

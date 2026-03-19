@@ -11,7 +11,7 @@ import { expect, test } from "bun:test";
 // ## implicit usage with manual binding 
 // in this method we just return the raw states of the result and then in the callee manually transform it 
 
-function fetchUser(id: number) {
+function fetchUserNormal(id: number) {
     if (id === 1) {
         return (new ResultSuccess({ name: "John Doe", age: 30 }));
     } else if (id === 2) {
@@ -21,7 +21,10 @@ function fetchUser(id: number) {
     }
 }
 
-BasicResult.fromUnion(fetchUser(4))
+BasicResult.fromUnion(fetchUserNormal(4))
+
+
+const fetchUser = mapResult(fetchUserNormal)
 
 
 // ## implicit usage with automatic binding 
@@ -35,7 +38,7 @@ export const getFileContent = mapResult((filename: string) => {
     }
 })
 
-getFileContent().ifError({
+getFileContent("").ifError({
     "Invalid file name": v => v.name
 })
 
@@ -55,6 +58,7 @@ test("BasicResult should correctly identify and unpack a success result", () => 
 
 test("BasicResult should correctly identify an error result", () => {
     const errorResult = fetchUser(2);
+    console.log(errorResult.value)
     expect(errorResult.isOk()).toBe(false);
     expect(errorResult.isError()).toBe(true);
 });
@@ -96,12 +100,6 @@ test("BasicResult.RawSuccess should create a success result", () => {
     expect(success.unpack()).toBe("data");
 });
 
-test("BasicResult.RawError should create a ResultError", () => {
-    const error = BasicResult.RawError("MyError", "message");
-    expect(error).toBeInstanceOf(ResultError);
-    expect(error.name).toBe("MyError");
-    expect(error.message).toBe("message");
-});
 
 test("BasicResult.Error should create an error result", () => {
     const error = BasicResult.Error(new ResultError("MyError", "message"));

@@ -1,6 +1,6 @@
 
-import { OneOf } from "../../../../../../src/data_structures/functional-patterns/one-of/oneOf";
-import { TypeMarker } from "../../../../../../src/data_structures/others/type-marker";
+import { TypeMarker } from "@better-standard-internal/data_structures";
+import { OneOf } from "@better-standard-internal/data_structures/functional-patterns/one-of";
 import { expect, test } from "bun:test";
 
 class Success<T> extends TypeMarker<"Success"> {

@@ -1,5 +1,5 @@
 
-import { GetSet, Get } from "../../../../src/data_structures/others/getSetClass";
+import { Get, GetSet } from "@better-standard-internal/data_structures";
 import { expect, test } from "bun:test";
 
 test("GetSet should correctly store and retrieve values", () => {
@@ -17,7 +17,7 @@ test("GetSet should execute onSet callback when value is set", () => {
 
 test("GetSet should execute onGet callback when value is retrieved", () => {
     let getValue = 0;
-    const gs = new GetSet(10, (v) => { getValue = v; });
+    const gs = new GetSet(10, (v) => { console.log("0099");getValue = v; });
     gs.get();
     expect(getValue).toBe(10);
 });
@@ -25,7 +25,7 @@ test("GetSet should execute onGet callback when value is retrieved", () => {
 test("GetSet map should transform the value", () => {
     const gs = new GetSet(10);
     const mapped = gs.map(v => v * 2);
-    expect(mapped.raw).toBe(20);
+    expect(mapped.map).toBe(20);
 });
 
 test("GetSet simpleMap should transform the value and return it directly", () => {

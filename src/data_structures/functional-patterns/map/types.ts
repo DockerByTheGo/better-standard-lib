@@ -1,4 +1,5 @@
 export type IMapable<V> = {
+  raw: V
   map: <F>(func: (v: V) => F) => IMapable<F>;
 };
 

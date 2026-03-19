@@ -12,7 +12,8 @@
   "dependencies": {
     "@types/bun": "latest",
     "bun-types": "latest",
-    "dotenv": "^16.5.0"
+    "dotenv": "^16.5.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "tsup": "^8.5.0",
