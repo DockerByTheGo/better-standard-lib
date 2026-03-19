@@ -1,82 +1,91 @@
 import { OneOf } from "@better-standard-internal/data_structures/functional-patterns/one-of";
+import { TypeMarker } from "@better-standard-internal/data_structures/others/type-marker";
 import { describe, expect, it, vi } from "vitest";
 
+// --- test fixtures ---
 
-// Test the OneOf implementation
-describe("oneOf", () => {
-  type TestType = {
-    success: { message: string };
-    error: { code: number; message: string };
-  };
+class Success extends TypeMarker<"Success"> {
+  constructor(public readonly message: string) {
+    super("Success");
+  }
+}
 
-  it("should create a new instance with initial value", () => {
-    const instance = new OneOf.Instance<TestType>({
-      success: { message: "Hello" },
+class Failure extends TypeMarker<"Failure"> {
+  constructor(public readonly code: number) {
+    super("Failure");
+  }
+}
+
+const Result = OneOf([Success, Failure]);
+
+// --- tests ---
+
+describe("OneOf", () => {
+  describe("construction", () => {
+    it("wraps a value and exposes it via .value", () => {
+      const instance = new Result(new Success("ok"));
+      expect(instance.value).toBeInstanceOf(Success);
+      expect((instance.value as Success).message).toBe("ok");
     });
-    expect(instance.value).toEqual({ type: "success", d: { message: "Hello" } });
+
+    it("cons holds the correct constructors", () => {
+      expect(Result.cons.Success).toBe(Success);
+      expect(Result.cons.Failure).toBe(Failure);
+    });
+
+    it("otherCons creates an instance of the correct type", () => {
+      const instance = Result.otherCons("Success", "hello");
+      expect(instance.value).toBeInstanceOf(Success);
+      expect((instance.value as Success).message).toBe("hello");
+    });
   });
 
-  it("should run the correct handler", async () => {
-    const instance = new OneOf.Instance<TestType>({
-      type: "error",
-      d: { code: 404, message: "Not found" },
+  describe("is()", () => {
+    it("returns true when type matches", () => {
+      const instance = new Result(new Success("yes"));
+      expect(instance.is("Success")).toBe(true);
     });
 
-    const errorHandler = vi.fn();
-
-    instance.if({
-      v: "error",
-      handler: async (v: OneOf.One<"error", TestType>) => {
-        errorHandler(v.d.message);
-      },
+    it("returns false when type does not match", () => {
+      const instance = new Result(new Failure(404));
+      expect(instance.is("Success")).toBe(false);
     });
-
-    await instance.run();
-    expect(errorHandler).toHaveBeenCalledWith("Not found");
   });
 
-  it("should prevent duplicate handlers", () => {
-    const instance = new OneOf.Instance<TestType, "success">({
-      type: "success",
-      d: { message: "Hello" },
-    });
-    instance.if({
-      v: "success",
-      handler: async (v: OneOf.One<"success", TestType>) => {
-        // Do something
-      },
-    });
+  describe("defineHandlers()", () => {
+    it("calls the matching handler", () => {
+      const onSuccess = vi.fn();
+      const onFailure = vi.fn();
 
-    expect(() => {
-      instance.if({
-        v: "success",
-        handler: async (v: OneOf.One<"success", TestType>) => {
-          // Do something
-        },
+      new Result(new Success("done")).defineHandlers({
+        ifSuccess: (v) => onSuccess(v.message),
+        ifFailure: (v) => onFailure(v.code),
       });
-    }).toThrow("Handler for success is already defined");
-  });
 
-  it("should define multiple handlers", async () => {
-    const instance = new OneOf.Instance<TestType, "success">({
-      type: "success",
-      d: { message: "Hello" },
+      expect(onSuccess).toHaveBeenCalledWith("done");
+      expect(onFailure).not.toHaveBeenCalled();
     });
-    const successHandler = vi.fn();
-    const errorHandler = vi.fn();
 
-    const handlers = {
-      success: async (v: OneOf.One<"success", TestType>) => {
-        successHandler(v.d.message);
-      },
-      error: async (v: OneOf.One<"error", TestType>) => {
-        errorHandler(v.d.message);
-      },
-    };
+    it("calls the failure handler when value is Failure", () => {
+      const onSuccess = vi.fn();
+      const onFailure = vi.fn();
 
-    const newInstance = await instance.def(handlers);
-    await newInstance.run();
-    expect(successHandler).toHaveBeenCalledWith("Hello");
-    expect(errorHandler).not.toHaveBeenCalled();
+      new Result(new Failure(500)).defineHandlers({
+        ifSuccess: (v) => onSuccess(v.message),
+        ifFailure: (v) => onFailure(v.code),
+      });
+
+      expect(onFailure).toHaveBeenCalledWith(500);
+      expect(onSuccess).not.toHaveBeenCalled();
+    });
+
+    it("handlers are optional — missing handler does not throw", () => {
+      const instance = new Result(new Success("hi"));
+      expect(() => {
+        instance.defineHandlers({
+          ifSuccess: (v) => v.message,
+        });
+      }).not.toThrow();
+    });
   });
 });

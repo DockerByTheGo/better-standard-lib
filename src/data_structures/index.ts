@@ -1,7 +1,6 @@
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/map";
 export * from "./functional-patterns/option";
-export * from "./functional-patterns/overload";
 export * from "./functional-patterns/result";
 export * from "./group";
 export * from "./others/contextsafetype";

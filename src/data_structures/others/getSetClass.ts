@@ -28,7 +28,7 @@ export class GetSet<V> implements IMapable<V> {
   }
 
   get value(): V {
-    // this.onGet(this.v)
+    this.onGet(this.v)
     return this.v;
   }
 

@@ -17,7 +17,7 @@ test("GetSet should execute onSet callback when value is set", () => {
 
 test("GetSet should execute onGet callback when value is retrieved", () => {
     let getValue = 0;
-    const gs = new GetSet(10, (v) => { getValue = v; });
+    const gs = new GetSet(10, (v) => { console.log("0099");getValue = v; });
     gs.get();
     expect(getValue).toBe(10);
 });
