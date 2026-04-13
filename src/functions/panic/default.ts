@@ -1,4 +1,4 @@
-export function panic(msg: string) {
+export function panic(msg: string): never {
   throw new Error(msg);
 }
 
