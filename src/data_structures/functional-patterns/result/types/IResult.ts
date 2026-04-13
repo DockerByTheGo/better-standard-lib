@@ -1,6 +1,6 @@
 import type { IMapable } from "../../map";
 import type { Optionable } from "../../option";
-import type { ResultError } from "../error";
+import { ResultError } from "../error";
 import type { IResultSucess } from "../success";
 
 export type IResultable<
@@ -21,4 +21,11 @@ export type IResultable<
     },
   ) => ReturnType<TErrorConfig[keyof TErrorConfig]> | ReturnType<TSuccessHandler>;
   unpack: () => TSuccess["data"];
-} 
+}
+
+
+
+export type IResultableDefault = IResultable<
+  IResultSucess<unknown>,
+  Record<string, ResultError<string>>
+>

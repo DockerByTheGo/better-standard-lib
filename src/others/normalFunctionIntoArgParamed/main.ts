@@ -1,19 +1,51 @@
-type FunctionParams<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
+type AnyFunction = (...args: any[]) => any;
+
+export type FunctionParams<T extends AnyFunction> =
+  T extends (...args: infer P) => any ? P : never;
+
+function getFunctionParamNames(func: AnyFunction): string[] {
+  const args = func
+    .toString()
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\/\/.*$/gm, "")
+    .match(/^[^(]*\(([^)]*)\)/)?.[1];
+
+  if (!args) {
+    return [];
+  }
+
+  return args
+    .split(",")
+    .map(arg => arg.trim())
+    .filter(Boolean);
+}
+
+export function transformFunc<
+  TArgs extends Record<string, unknown>,
+  TFunc extends AnyFunction,
+>(
+  func: TFunc,
+): (arg: TArgs) => ReturnType<TFunc> {
+  return (arg) => {
+    const values = getFunctionParamNames(func).map(key => arg[key]);
+
+    return func(...values as FunctionParams<TFunc>);
+  };
+}
 
 function greet(name: string, age: number, isActive: boolean) {
-  return `Hello ${name}`;
+  return `Hello ${name}, ${age}, ${isActive}`;
 }
 
-type GreetParams = FunctionParams<typeof greet>; // [name: string, age: number, isActive: boolean]
+const greetFromObject = transformFunc<
+  {
+    name: string;
+    age: number;
+    isActive: boolean;
+  },
+  typeof greet
+>(greet);
 
-
-
-
-
-function transformFunc<T extends Function>(v: T): (arg: {[K in FunctionParams<T>[number]] : number}) => ReturnType<T> {
-    return ;
-}
-
-
-
-transformFunc(greet)()
+greetFromObject({ name: "John", age: 30, isActive: true });
+// should expect all preoperties
+greetFromObject({"age": 3, "isActive": true, name: ""});
