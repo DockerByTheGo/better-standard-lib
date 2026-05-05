@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "module": "index.ts",
   "scripts": {
-    "build-lib": "tsup index.ts --format cjs,esm --dts"
+    "build-lib": "tsup index.ts --format cjs,esm --dts",
+    "test:vitest": "bun --bun vitest run --config vitest.config.ts"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

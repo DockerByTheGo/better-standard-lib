@@ -1,5 +1,7 @@
-import { GetShapeFromSchema, Schema } from "@better-standard-internal/others/validator/schema";
 import type { IResultSucess } from "../types";
+
+type Schema = unknown;
+type GetShapeFromSchema<TSchema> = TSchema;
 
 export class ResultSuccess<TSchema> implements IResultSucess<TSchema> {
   public readonly ok = true as const;

@@ -69,7 +69,11 @@ export class Optionable<T> implements IOptionable<T> {
     if (this.isNone()) {
       panic(errMsg ?? statics.messageForWhenOptionIsNone);
     }
-    return new Mapable(this.value as T);
+    const mapable = new Mapable(this.value as T);
+    if (typeof this.value === "object" && this.value !== null) {
+      Object.assign(mapable, this.value);
+    }
+    return mapable;
   }
 
   unpack_or(default_handler: () => T): T {
