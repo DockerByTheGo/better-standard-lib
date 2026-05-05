@@ -4,7 +4,7 @@ import z from "zod";
 import { expect, test } from "bun:test";
 
 test("GroupBuilder with Zod validation should correctly modify the state", () => {
-  const stateSchema z.object({
+  const stateSchema = z.object({
     dockerImage: z.string(),
     port: z.number(),
     containerName: z.string().optional(),

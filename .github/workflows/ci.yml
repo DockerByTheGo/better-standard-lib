@@ -28,7 +28,7 @@ jobs:
         run: bun run lint:ci
 
       - name: Build better-standard-lib
-        run: bun run build:ci
+        run: bun build index.ts
 
       - name: Run Vitest tests
         run: bun run test:vitest
