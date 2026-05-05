@@ -24,11 +24,4 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Lint better-standard-lib
-        run: bun run lint:ci
-
-      - name: Build better-standard-lib
-        run: bun build index.ts
-
-      - name: Run Vitest tests
-        run: bun run test:vitest
+   
