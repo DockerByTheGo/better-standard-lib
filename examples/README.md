@@ -1,93 +1,22 @@
-# Example Usage of Better Standard
+# Examples
 
-This directory contains various examples demonstrating how to use the better standard implementation.
+This folder contains runnable examples for the parts of the library that still exist in `src`.
 
-## Structure
+## What is covered
 
-- `basic-examples/`: Simple examples showing fundamental concepts
-- `advanced-examples/`: More complex usage patterns and best practices
-- `error-handling/`: Examples of error handling patterns
-- `typescript/`: TypeScript-specific examples and type safety demonstrations
+- `data_structures/functional-patterns/`: `Mapable`, `Optionable`, and `BasicResult`
+- `data_structures/others/`: `GetSet`, `Tick`, and `TypeMarker`
+- `functions/`: `map`, `entries`, `TryCatch`, `catchF`, `composeCatch`, `matchStringSimple`, and `ReturnFromSubfunction`
 
-## Getting Started
+## Running an example
 
-Each example is self-contained and can be run independently. Make sure to install the required dependencies before running any examples.
+Examples import from the package entrypoint so they stay aligned with public exports.
 
 ```bash
-npm install
+bun examples/functions/map.ts
 ```
 
-## Examples
+## Notes
 
-### Basic Usage
-
-```typescript
-import { Err, Ok, Result } from "better-standard";
-
-// Basic result creation
-const success = Ok(42);
-const failure = Err("Something went wrong");
-
-// Pattern matching
-const value = success.match({
-  Ok: val => val,
-  Err: err => 0
-});
-
-// Chaining operations
-const result = success
-  .map(val => val * 2)
-  .mapErr(err => `Error: ${err}`);
-```
-
-### Error Handling
-
-```typescript
-import { Err, Ok, Result } from "better-standard";
-
-function divide(a: number, b: number): Result<number, string> {
-  if (b === 0) {
-    return Err("Cannot divide by zero");
-  }
-  return Ok(a / b);
-}
-
-// Using the function
-const result = divide(10, 2)
-  .andThen(val => divide(val, 0))
-  .mapErr(err => `Calculation failed: ${err}`);
-```
-
-### TypeScript Integration
-
-```typescript
-import { Err, Ok, Result } from "better-standard";
-
-type User = {
-  id: number;
-  name: string;
-};
-
-function fetchUser(id: number): Result<User, string> {
-  // Implementation
-  return Ok({ id, name: "John Doe" });
-}
-
-// Type-safe error handling
-const user = fetchUser(1)
-  .map(user => ({
-    ...user,
-    fullName: user.name
-  }))
-  .unwrapOrThrow();
-```
-
-## Contributing
-
-Feel free to add more examples or improve existing ones. Each example should:
-
-1. Be self-contained
-2. Demonstrate a specific concept
-3. Include proper error handling
-4. Show best practices
-5. Be well-documented
+- Stale examples for removed modules were deleted.
+- If a new runtime module is added, it should get a small focused example here.

@@ -1,82 +1,33 @@
-import { ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
-import { BasicResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
-import { ResultSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/success/implementations/Basic";
+import { BasicResult, ResultError, ResultSuccess } from "../../../../index";
 
+console.log("--- BasicResult ---");
 
-// --- BasicResult Example ---
-console.log("--- BasicResult Example ---");
+type DivideError = { "division-by-zero": ResultError<"division-by-zero"> };
+type DivideResult = BasicResult<ResultSuccess<number>, DivideError>;
 
-// Define some error types
-type NotFoundError = ResultError<"NotFoundError">;
-type UnauthorizedError = ResultError<"UnauthorizedError">;
+function divide(a: number, b: number): DivideResult {
+  if (b === 0) {
+    return new BasicResult(new ResultError("division-by-zero", "Cannot divide by zero."));
+  }
 
-// Define a success type
-type User = { name: string; age: number };
-type UserSuccess = ResultSuccess<User>;
-
-
-// A function that might return a success or an error
-function fetchUser(id: number): BasicResult<UserSuccess, {
-    NotFoundError: NotFoundError,
-    UnauthorizedError: UnauthorizedError,
-}> {
-    if (id === 1) {
-        return BasicResult.Succes(new ResultSuccess({ name: "John Doe", age: 30 }));
-    } else if (id === 2) {
-        return new BasicResult.Error(new ResultError("UnauthorizedError", "You are not authorized to access this user."));
-    } else {
-        return new BasicResult.Error(new ResultError("NotFoundError", `User with id ${id} not found.`));
-    }
+  return new BasicResult(new ResultSuccess(a / b));
 }
 
-
-// --- Handling results ---
-console.log("--- Handling Results ---");
-
-function displayUser(id: number) {
-    const userResult = fetchUser(id);
-
-    // Using isOk() and isError()
-    if (userResult.isOk()) {
-        console.log(`Success for id ${id}:`, userResult.unpack());
-    } else if(userResult.isError()) {
-        const error = userResult; // value is the error object
-        console.log(`Error for id ${id}: ${error.name} - ${error.message}`);
-    }
-
-    // Using try() for more advanced pattern matching
-    userResult.try({
-        ifSuccess: (user) => {
-            console.log(`try() success for id ${id}:`, user);
-        },
-        ifError: {
-            NotFoundError: (e) => {
-                console.log(`try() error for id ${id}: ${e.message}`);
-            },
-            UnauthorizedError: (e) => {
-                console.log(`try() error for id ${id}: ${e.message}`);
-            }
-        }
-    });
+const success = divide(12, 3);
+if (success.isOk()) {
+  console.log("Success value:", success.unpack());
 }
 
-displayUser(1);
-console.log("");
-displayUser(2);
-console.log("");
-displayUser(3);
+const failure = divide(12, 0);
+if (failure.isError()) {
+  console.log("Error:", failure.value.name, "-", failure.value.message);
+}
 
+const handled = divide(20, 5).try({
+  ifSuccess: value => `Handled success: ${value}`,
+  ifError: {
+    "division-by-zero": error => `Handled error: ${error.message}`,
+  },
+});
 
-// --- Using RawSuccess and RawError static methods ---
-console.log("\n--- Using RawSuccess and RawError ---");
-
-const rawSuccess = BasicResult.RawSuccess({ message: "It worked!" });
-console.log("Raw success:", rawSuccess.unpack());
-
-// Note: RawError creates a ResultError, not a BasicResult.
-const rawError = new BasicResult.RawError("MyError", "Something went wrong.");
-const errorResult = new BasicResult.Error(rawError);
-
-errorResult.ifError({
-    MyError: (e) => console.log(`Raw error handled: ${e.message}`),
-})
+console.log(handled.raw);
