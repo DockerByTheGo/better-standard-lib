@@ -1,5 +1,5 @@
 
-import { GetSet, Get } from "../../../../src/data_structures/others/getSetClass";
+import { Get, GetSet } from "../../../../src/data_structures/others/getSetClass";
 
 // --- GetSet Example ---
 console.log("--- GetSet Example ---");

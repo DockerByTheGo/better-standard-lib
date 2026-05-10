@@ -19,7 +19,7 @@ test("SimpleResult throws when unpacking an error result object", () => {
 
 test("SimpleResult can be built from success and error helpers", () => {
     const success = SimpleResult.Success({ path: "avatar.png" });
-    const error = SimpleResult.Error("already-exists");
+    const error = new SimpleResult.Error("already-exists");
 
     expect(success.unpack()).toEqual({ path: "avatar.png" });
     expect(error.isError()).toBe(true);

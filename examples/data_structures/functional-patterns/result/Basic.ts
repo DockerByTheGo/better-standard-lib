@@ -23,9 +23,9 @@ function fetchUser(id: number): BasicResult<UserSuccess, {
     if (id === 1) {
         return BasicResult.Succes(new ResultSuccess({ name: "John Doe", age: 30 }));
     } else if (id === 2) {
-        return BasicResult.Error(new ResultError("UnauthorizedError", "You are not authorized to access this user."));
+        return new BasicResult.Error(new ResultError("UnauthorizedError", "You are not authorized to access this user."));
     } else {
-        return BasicResult.Error(new ResultError("NotFoundError", `User with id ${id} not found.`));
+        return new BasicResult.Error(new ResultError("NotFoundError", `User with id ${id} not found.`));
     }
 }
 
@@ -74,8 +74,8 @@ const rawSuccess = BasicResult.RawSuccess({ message: "It worked!" });
 console.log("Raw success:", rawSuccess.unpack());
 
 // Note: RawError creates a ResultError, not a BasicResult.
-const rawError = BasicResult.RawError("MyError", "Something went wrong.");
-const errorResult = BasicResult.Error(rawError);
+const rawError = new BasicResult.RawError("MyError", "Something went wrong.");
+const errorResult = new BasicResult.Error(rawError);
 
 errorResult.ifError({
     MyError: (e) => console.log(`Raw error handled: ${e.message}`),

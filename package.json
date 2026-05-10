@@ -4,10 +4,9 @@
   "version": "1.0.0",
   "module": "index.ts",
   "scripts": {
-    "lint:ci": "bunx eslint vitest.config.ts tests/option.test.ts tests/catch.test.ts tests/oneOf.test.ts tests/mapObject.test.ts tests/tryCatch.test.ts tests/objectEntries.test.ts tests/types.test.ts tests/data_structures/functional-patterns/optionable/unit/main.test.ts tests/data_structures/functional-patterns/optionable/type/main.test.ts",
-    "build:ci": "tsup index.ts --format cjs,esm",
-    "build-lib": "tsup index.ts --format cjs,esm --dts",
-    "test:vitest": "bun --bun vitest run --config vitest.config.ts"
+    "lint": "bun --bun eslint .",
+    "test": "bun x vitest",
+    "get-coverage": "bun x vitest --coverage"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

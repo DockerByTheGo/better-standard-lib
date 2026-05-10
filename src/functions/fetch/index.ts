@@ -17,21 +17,10 @@ export async function betterFetch<TResponse extends FetchSchema>(url: string, sc
                 schema[res.status].safeParse(jsonResponse),
                 validationResult => validationResult.success
                     ? BasicResult.RawSuccess(validationResult.data)
-                    : BasicResult.RawError("failed-validation", validationResult.error.message)
+                    : new BasicResult.RawError("failed-validation", validationResult.error.message)
             )
 
         },
-        err => BasicResult.RawError("generic error", err.message)
+        err => new BasicResult.RawError("generic error", err.message)
     )
 }
-
-
-
-betterFetch("google.com", { 201: z.object({ hi: z.string() }) }).then(v => v.try({
-    ifError: {"": v => {
-        v.throw()
-    }},
-    ifSuccess: v => {
-        // do whatever 
-    }
-}))

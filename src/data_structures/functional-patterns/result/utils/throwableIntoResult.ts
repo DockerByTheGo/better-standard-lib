@@ -44,14 +44,3 @@ export function throwableIntoResult<
         return new resultableClass(err)
     }
 }
-
-
-
-
-
-throwableIntoResult(
-    () => {
-        fetch("google.com")
-    },
-    SimpleResult
-)

@@ -1,12 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strict": true,
     "baseUrl": ".",
     "paths": {
       "@better-standard-internal/*": ["src/*"],
       "@src/*": ["src/*"],
       "@test/*": ["tests/*"]
-    }
+    },
+    "strict": true
   }
 }

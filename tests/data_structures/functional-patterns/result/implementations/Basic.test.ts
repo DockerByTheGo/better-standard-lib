@@ -58,7 +58,6 @@ test("BasicResult should correctly identify and unpack a success result", () => 
 
 test("BasicResult should correctly identify an error result", () => {
     const errorResult = fetchUser(2);
-    console.log(errorResult.value)
     expect(errorResult.isOk()).toBe(false);
     expect(errorResult.isError()).toBe(true);
 });
@@ -102,7 +101,7 @@ test("BasicResult.RawSuccess should create a success result", () => {
 
 
 test("BasicResult.Error should create an error result", () => {
-    const error = BasicResult.Error(new ResultError("MyError", "message"));
+    const error = new BasicResult.Error(new ResultError("MyError", "message"));
     expect(error.isError()).toBe(true);
 });
 

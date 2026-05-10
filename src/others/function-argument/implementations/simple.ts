@@ -1,24 +1,25 @@
-function newFunctionArg<T, TDefaultValue extends T | undefined = undefinedl>(args: {
-    schema: T,
-    defaultValue?: T
-    validator?: (v: T) => boolean // replace with using iVlidatopr in future 
-}
-) {
-    return class FunctionArgument {
-        constructor(public readonly value: T) {
+type FunctionArgumentConfig<T> = {
+  schema: T;
+  defaultValue?: T;
+  validator?: (v: T) => boolean;
+};
 
-        }
-
-        private validator:  = args.validator
-
-        static def = () => new FunctionArgument(args.defaultValue)
-
+function newFunctionArg<T>(args: FunctionArgumentConfig<T>) {
+  return class FunctionArgument {
+    constructor(public readonly value: T) {
+      if (args.validator && !args.validator(value)) {
+        throw new Error("Invalid function argument value.");
+      }
     }
-}
-class MessageArg extends newFunctionArg({schema: "", defaultValue: "d"}){}
 
-function sendMessage(msg: MessageArg){
-    return 2
+    static def = () => new FunctionArgument(args.defaultValue as T);
+  };
 }
 
-sendMessage(MessageArg.def())
+class MessageArg extends newFunctionArg({ schema: "", defaultValue: "d" }) {}
+
+function sendMessage(msg: MessageArg) {
+  return msg.value.length;
+}
+
+void sendMessage;

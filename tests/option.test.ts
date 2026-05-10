@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
-  Try,
+  ifNotNone,
   mapOptionable,
   Optionable,
-  ifNotNone,
   statics,
+  Try,
 } from "../src/data_structures/functional-patterns/option/main";
 
 describe("option utilities", () => {
