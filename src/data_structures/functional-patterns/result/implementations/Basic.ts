@@ -39,7 +39,7 @@ export class BasicResult<
     try{
       return BasicResult.RawSuccess( v())
     }catch(e) {
-      return BasicResult.RawError("", e.message)
+      return new BasicResult.RawError("", e.message)
     }
   }
 

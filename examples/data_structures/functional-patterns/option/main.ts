@@ -1,18 +1,35 @@
+import { ifNotNone, mapOptionable, Optionable, Try } from "../../../../src/data_structures/functional-patterns/option";
 
-Unpacking 'someValue': Hello, World!
-Length of someValue string: 13
+const someValue = Optionable.some("Hello, World!");
+const noValue = Optionable.none<string>();
 
-FlatMap on someValue (longer than 5): 13
-FlatMap on someValue (not longer than 20): -1
+console.log("Unpacking 'someValue':", someValue.unpack().raw);
+console.log("Length of someValue string:", someValue.map(v => v.length).unpack().raw);
 
-Using the 'try' method:
-Success: Hello, World!
-Failure: The value was None
+console.log("\nUsing the 'try' method:");
+console.log(someValue.try({
+  ifNone: () => "Failure: The value was None",
+  ifNotNone: value => `Success: ${value}`,
+}).raw);
+console.log(noValue.try({
+  ifNone: () => "Failure: The value was None",
+  ifNotNone: value => `Success: ${value}`,
+}).raw);
 
---- Helper Functions ---
-Try with a value: Got a value
-Try with null: Got nothing
-mapOptionable from 'hello' is some: true
-mapOptionable from null is none: true
-Using ifNotNone:
-The string is: 'A string'
+console.log("\n--- Helper Functions ---");
+console.log("Try with a value:", Try("hello", {
+  ifNone: () => "Got nothing",
+  ifNotNone: () => "Got a value",
+}));
+console.log("Try with null:", Try(null, {
+  ifNone: () => "Got nothing",
+  ifNotNone: () => "Got a value",
+}));
+
+console.log("mapOptionable from 'hello' is some:", mapOptionable("hello").isSome());
+console.log("mapOptionable from null is none:", mapOptionable(null).isNone());
+
+console.log("Using ifNotNone:");
+ifNotNone("A string", value => {
+  console.log(`The string is: '${value}'`);
+});

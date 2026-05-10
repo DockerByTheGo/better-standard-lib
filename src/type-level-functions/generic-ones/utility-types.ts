@@ -13,7 +13,3 @@ type IfAnyInternal<T, Y, N = never>
   = 0 extends (1 & T) ? Y : N;
 
 export type ifAny<TypeToCheck, Default> = IfAnyInternal<TypeToCheck, Default, TypeToCheck>;
-
-type k = ifAny<{ hi: string }, {}>;
-
-type l = ifAny<any, { data: string }>;

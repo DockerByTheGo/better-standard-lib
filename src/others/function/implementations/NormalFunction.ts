@@ -62,8 +62,4 @@ export class NormalFunc<
 
 }
 
-const g = NormalFunc.fromFunc((args: { name: string }) => "" as const, Optionable.some("kiikkiikkiik"));
-
 export const NFunc = NormalFunc.fromFunc;
-
-const h = NFunc((args: { name: string }) => "", Optionable.some("h"));

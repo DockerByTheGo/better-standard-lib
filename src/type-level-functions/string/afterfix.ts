@@ -11,14 +11,6 @@ export type AfterfixKeysOfRecord<
 
 export type FirstArg<T extends (...args: any[]) => any> = T extends (arg1: infer A, ...args: any[]) => any ? A : never;
 
-type j = AfterfixKeysOfRecord<{ koko: string }, "j">;
-
-// expected
-
-// type j = {
-//     kokoj: string;
-// }
-
 export type NeverWithDefault<T, Default> = T extends never ? Default : T;
 
 type IsExact<A, B> // this is here because any extends everything and everything extends any, so the type becomes very loose when any is present and this helps prevent that behaviour

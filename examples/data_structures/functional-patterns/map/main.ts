@@ -16,7 +16,7 @@ console.log("Value from valueOf():", mapped.valueOf());
 
 // Chaining map calls
 const chainedMap = new Mapable("hello")
-    .map(v => v + " world")
+    .map(v => `${v  } world`)
     .map(v => v.toUpperCase());
 
 console.log("\nChained map result:", chainedMap.raw);
