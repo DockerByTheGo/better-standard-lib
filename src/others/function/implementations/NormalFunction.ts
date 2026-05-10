@@ -28,7 +28,7 @@ export class NormalFunc<
     super("NormalFunc");
   }
 
-  argsSchema: TArgs = {};
+  TargsSchema: TArgs = {};
   TGetName: TName;
   TGetArgs: TArgs;
   TGetFunction: (args: TArgs) => TReturn;

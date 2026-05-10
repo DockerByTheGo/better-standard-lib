@@ -1,4 +1,4 @@
-import { Constructor } from "@better-standard-internal/others/addStaticConstrucots/main";
+import type { Constructor } from "@better-standard-internal/types";
 
 export class TypeMarker<T extends string> {
   constructor(public readonly type: T) {

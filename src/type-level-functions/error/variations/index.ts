@@ -1,1 +1,2 @@
-export * from "./memeberAlreadyPresent"
+export * from "./memeberAlreadyPresent";
+export * from "./memberAlreadyPresent";

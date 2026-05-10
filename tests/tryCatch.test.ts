@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { TryCatch } from "../src/functions/error-handlng/tryCatch";
+import { TryCatch } from "../src/functions/error-handling/tryCatch";
 
 describe("TryCatch", () => {
     it("invokes the success handler when the wrapped function succeeds", () => {

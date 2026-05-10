@@ -134,7 +134,7 @@ const user = fetchUser(1)
 ## Directory Structure
 
 - `src/` — implementation
-- `example-usage/` — runnable usage examples
+- `examples/` — runnable usage examples
 - `tests/` — unit tests
 
 ## Contributing
@@ -149,7 +149,7 @@ Feel free to add more examples or improve existing ones! Each example should:
 
 ---
 
-For more advanced usage, see the `example-usage/advanced-examples` and `example-usage/basic-examples` directories.
+For more advanced usage, see the `examples/advanced-examples` directory.
 
 # better-standard-lib
 
