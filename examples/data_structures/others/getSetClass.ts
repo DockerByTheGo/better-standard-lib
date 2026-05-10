@@ -1,36 +1,24 @@
+import { Get, GetSet } from "../../../index";
 
-import { Get, GetSet } from "../../../../src/data_structures/others/getSetClass";
+console.log("--- GetSet ---");
 
-// --- GetSet Example ---
-console.log("--- GetSet Example ---");
-
-// Create a GetSet instance with logging callbacks
-const myGetSet = new GetSet(10, 
-    (v) => console.log(`Value is being accessed. Current value: ${v}`),
-    (v) => console.log(`Value is being set to: ${v}`)
+const state = new GetSet(
+  10,
+  value => console.log(`reading value: ${value}`),
+  value => console.log(`setting value to: ${value}`),
 );
 
-console.log("Initial value:", myGetSet.get());
+console.log("Initial value:", state.get());
+state.set(20);
+console.log("Current value:", state.value);
 
-myGetSet.set(20);
-console.log("Value after set:", myGetSet.get());
+const doubled = state.map(value => value * 2);
+console.log("Mapped value:", doubled.raw);
 
-// Using the value property
-console.log("Accessing through .value property:", myGetSet.value);
+const label = state.simpleMap(value => `Counter = ${value}`);
+console.log("simpleMap result:", label);
 
-// Using map
-const mapped = myGetSet.map(v => v * 2);
-console.log("Mapped value:", mapped.raw);
+console.log("\n--- Get ---");
 
-// Using simpleMap
-const simpleMapped = myGetSet.simpleMap(v => `The value is ${v}`);
-console.log("Simple mapped value:", simpleMapped);
-
-
-// --- Get Example ---
-console.log("\n--- Get Example ---");
-
-const myGet = new Get("This value is read-only");
-console.log("Value from Get:", myGet.v);
-
-// myGet.v = "new value"; // This would cause a compilation error
+const readonlyValue = new Get("read only");
+console.log("Stored value:", readonlyValue.v);

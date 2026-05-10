@@ -1,8 +1,9 @@
-import { ifNotNone, mapOptionable, Optionable, Try } from "../../../../src/data_structures/functional-patterns/option";
+import { ifNotNone, mapOptionable, Optionable, Try } from "../../../../index";
 
 const someValue = Optionable.some("Hello, World!");
 const noValue = Optionable.none<string>();
 
+console.log("--- Optionable ---");
 console.log("Unpacking 'someValue':", someValue.unpack().raw);
 console.log("Length of someValue string:", someValue.map(v => v.length).unpack().raw);
 
