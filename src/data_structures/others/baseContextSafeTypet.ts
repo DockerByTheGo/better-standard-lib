@@ -1,4 +1,5 @@
-import { Get, GetSet } from "./others/getSetClass";
+
+import { Get, GetSet } from "./getSetClass";
 
 export abstract class ContextSafeType<V> {
   private v: V;

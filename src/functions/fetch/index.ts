@@ -1,7 +1,7 @@
-import { TryCatch } from "../error-handlng";
-import { BasicResult, Optionable } from "@better-standard-internal/data_structures";
+import { BasicResult } from "@better-standard-internal/data_structures";
 import z, { ZodType } from "zod";
 import { map } from "../map";
+import { TryCatch } from "../error-handling";
 
 type FetchSchema = {
     [status: number]: ZodType
@@ -35,7 +35,3 @@ betterFetch("google.com", { 201: z.object({ hi: z.string() }) }).then(v => v.try
         // do whatever 
     }
 }))
-
-
-try{
-    fetch("google.com")}

@@ -7,24 +7,3 @@ export function matchStringSimple<T extends string, R>(
 ): R {
   return cases[value](value);
 }
-type Status = "idle" | "loading" | "success" | "error";
-
-const status = "success" as Status;
-
-const message = matchStringSimple(status, {
-  idle: () => "Waiting",
-  loading: () => "Loading...",
-  success: () => "Done",
-  error: () => "Failed",
-});
-
-
-function TFn(v: "undefined" | "defined") {
-  return matchStringSimple(v, {
-    "defined": () => "",
-    
-  });
-}
-
-
-console.log(message)
