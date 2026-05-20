@@ -5,8 +5,8 @@
   "module": "index.ts",
   "scripts": {
     "lint": "bun --bun eslint .",
-    "test": "bun x vitest",
-    "get-coverage": "bun x vitest --coverage"
+    "test": "vitest",
+    "get-coverage": "vitest --coverage"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

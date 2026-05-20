@@ -1,7 +1,7 @@
 
 import { GroupBuilder, GroupBuilderZodlessAccumelating } from "../../src/data_structures/group";
 import z from "zod";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 
 test("GroupBuilder with Zod validation should correctly modify the state", () => {
   const stateSchema = z.object({

@@ -1,6 +1,6 @@
 
 import { Mapable } from "@better-standard-internal/data_structures";
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 
 describe("Mapable - construction", () => {
     test("constructor holds a primitive value", () => {

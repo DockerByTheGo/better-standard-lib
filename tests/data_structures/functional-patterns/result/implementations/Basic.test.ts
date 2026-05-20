@@ -2,7 +2,7 @@
 import { ResultError } from "@better-standard-internal/data_structures/functional-patterns/result/error";
 import { BasicResult, mapResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/Basic";
 import { ResultSuccess } from "@better-standard-internal/data_structures/functional-patterns/result/success/implementations/Basic";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 
 // --- Test Setup ---
 
@@ -101,7 +101,7 @@ test("BasicResult.RawSuccess should create a success result", () => {
 
 
 test("BasicResult.Error should create an error result", () => {
-    const error = new BasicResult.Error(new ResultError("MyError", "message"));
+    const error = BasicResult.Error(new ResultError("MyError", "message"));
     expect(error.isError()).toBe(true);
 });
 

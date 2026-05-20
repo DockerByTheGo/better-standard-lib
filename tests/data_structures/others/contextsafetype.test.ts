@@ -1,6 +1,6 @@
 
 import { TypeSafeClassBase } from "@better-standard-internal/data_structures";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 
 test("TypeSafeClassBase should hold and return a string value", () => {
     const wrapper = new TypeSafeClassBase("test");

@@ -3,7 +3,7 @@ import {
   buildErrorReturningObject,
   ResultError,
 } from "@better-standard-internal/data_structures/functional-patterns/result/error";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 
 test("ResultError stores metadata and throws with the formatted message", () => {
   const resultError = new ResultError("TestError", "something went wrong");
