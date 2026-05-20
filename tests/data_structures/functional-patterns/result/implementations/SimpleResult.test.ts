@@ -1,5 +1,5 @@
 import { SimpleResult } from "@better-standard-internal/data_structures/functional-patterns/result/implementations/SimpleResult";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 
 test("SimpleResult unpacks a success result object", () => {
     const result = new SimpleResult({ data: { name: "John Doe", age: 30 } });
@@ -19,7 +19,7 @@ test("SimpleResult throws when unpacking an error result object", () => {
 
 test("SimpleResult can be built from success and error helpers", () => {
     const success = SimpleResult.Success({ path: "avatar.png" });
-    const error = new SimpleResult.Error("already-exists");
+    const error = SimpleResult.Error("already-exists");
 
     expect(success.unpack()).toEqual({ path: "avatar.png" });
     expect(error.isError()).toBe(true);

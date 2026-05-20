@@ -1,5 +1,5 @@
 import { ReturnFromSubfunction } from "../../src/functions/returnFromVoid";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 
 test("ReturnFromSubfunction should return the value returned by the callback", () => {
     const result = ReturnFromSubfunction<number>((v) => {

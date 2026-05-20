@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { expect, test } from "bun:test";
+import { expect, test } from "vitest";
 import { FunctionOverload } from "@better-standard-internal/data_structures";
 
 // --- FunctionOverload Tests ---

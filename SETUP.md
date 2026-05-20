@@ -48,9 +48,9 @@ A TypeScript-first, ergonomic, and safe standard library inspired by Rust and fu
 
 - **Run tests:**
   ```bash
-  bun test
+  vitest
   # or with watch mode
-  bun test --watch
+  vitest --watch
   ```
 
 - **Type checking:**
