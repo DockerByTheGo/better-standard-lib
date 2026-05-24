@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "bun --bun eslint .",
     "test": "vitest",
-    "get-coverage": "vitest --coverage"
+    "coverage": "bun test --coverage"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
