@@ -6,3 +6,4 @@ export * from "./logging/log";
 export * from "./match";
 export * from "./fetch"
 export * from "./returnFromVoid"
+export * from "./getAvailablePort"
