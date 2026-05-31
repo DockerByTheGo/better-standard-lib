@@ -1,5 +1,1 @@
-import type {Extends} from "../extends";
-
-
-
-export type If<T extends [unknown,unknown], True, False> = Extends<T[0],T[1]> extends true ? True : False
+export type If<T extends true | false, TTrue, TFalse> = T extends true ? TTrue : TFalse 

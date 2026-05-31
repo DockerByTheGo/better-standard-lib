@@ -10,8 +10,8 @@ import { ResultError } from "../error";
 import { ResultSuccess } from "../success/implementations/Basic";
 import { TypeError } from "@better-standard-internal/type-level-functions/error";
 import { map } from "@better-standard-internal/functions";
+import type { UnionToIntersection } from "@better-standard-internal/type-level-functions";
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
 export class BasicResult<
   TSuccess extends ResultSuccess<unknown>,
@@ -39,7 +39,7 @@ export class BasicResult<
     try{
       return BasicResult.RawSuccess( v())
     }catch(e) {
-      return new BasicResult.RawError("", e.message)
+      return BasicResult.RawError("", e.message)
     }
   }
 
@@ -64,7 +64,7 @@ export class BasicResult<
 
   ifError<TConfig extends { [K in keyof TErrors]: (v: TErrors[K]) => unknown; }>(handlers: TConfig): Optionable<ReturnType<TConfig[keyof TConfig]>> {
     if (this.isError()) {
-      return new Optionable(handlers[this.value]);
+      return  Optionable.some(handlers[this.value]);
     }
 
     return Optionable.none();
@@ -72,7 +72,7 @@ export class BasicResult<
 
   ifSuccess<R>(fn: (v: TSuccess) => R): Optionable<R> {
     if (this.isOk()) {
-      return new Optionable(fn(this.value.data));
+      return Optionable.some(fn(this.value.data));
     }
   }
 
